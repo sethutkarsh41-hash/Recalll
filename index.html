@@ -940,10 +940,10 @@ box-shadow:
 inset 0 1px 0 rgba(255,255,255,.025),
 var(--shadow-soft);
 transition:
-transform .24s var(--ease-fluid),
-border-color .22s var(--ease-fluid),
-background-color .22s var(--ease-fluid),
-box-shadow .22s var(--ease-fluid)
+transform .24s cubic-bezier(.2,.8,.2,1),
+border-color .22s cubic-bezier(.2,.8,.2,1),
+background-color .22s cubic-bezier(.2,.8,.2,1),
+box-shadow .22s cubic-bezier(.2,.8,.2,1)
 }
 
 .panel:hover{
@@ -964,9 +964,9 @@ inset 0 1px 0 rgba(255,255,255,.03),
 
 .field{
 transition:
-border-color .18s var(--ease-fluid),
-background-color .18s var(--ease-fluid),
-box-shadow .18s var(--ease-fluid)
+border-color .18s cubic-bezier(.2,.8,.2,1),
+background-color .18s cubic-bezier(.2,.8,.2,1),
+box-shadow .18s cubic-bezier(.2,.8,.2,1)
 }
 
 .btn,
@@ -974,11 +974,11 @@ box-shadow .18s var(--ease-fluid)
 .nav button,
 .deck{
 transition:
-transform .22s var(--ease-fluid),
-background-color .2s var(--ease-fluid),
-border-color .2s var(--ease-fluid),
-box-shadow .2s var(--ease-fluid),
-color .2s var(--ease-fluid)
+transform .22s cubic-bezier(.2,.8,.2,1),
+background-color .2s cubic-bezier(.2,.8,.2,1),
+border-color .2s cubic-bezier(.2,.8,.2,1),
+box-shadow .2s cubic-bezier(.2,.8,.2,1),
+color .2s cubic-bezier(.2,.8,.2,1)
 }
 
 .btn:active,
@@ -1018,11 +1018,11 @@ backdrop-filter:blur(16px)
 }
 
 .view.active{
-animation:screenArrive .28s var(--ease-return) both
+animation:screenArrive .28s cubic-bezier(.32,.72,0,1) both
 }
 
 .view.active .panel{
-animation:panelArrive .34s var(--ease-return) both
+animation:panelArrive .34s cubic-bezier(.32,.72,0,1) both
 }
 
 .view.active .panel:nth-child(2){
@@ -1030,11 +1030,11 @@ animation-delay:.035s
 }
 
 .card .answer:not(.hidden){
-animation:answerArrive .24s var(--ease-return) both
+animation:answerArrive .24s cubic-bezier(.32,.72,0,1) both
 }
 
 .card .rating:not(.hidden){
-animation:answerArrive .22s var(--ease-return) both
+animation:answerArrive .22s cubic-bezier(.32,.72,0,1) both
 }
 
 @keyframes screenArrive{
@@ -1178,7 +1178,6 @@ color:#c7cdc0
 <body>
 
 <main class="app">
-
 <header class="top">
 <div class="brand">
 <span class="logo" aria-hidden="true">✳</span>
@@ -1236,15 +1235,365 @@ placeholder="Class 12 · Accountancy · Share Capital"
 autocomplete="off"
 >
 
+<!-- AUTO CHAPTER MODE -->
+
+<div
+style="
+margin-top:16px;
+padding:16px;
+border:1px solid var(--line);
+border-radius:18px;
+background:rgba(215,245,139,.025)
+"
+>
+
+<div
+style="
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:12px;
+margin-bottom:14px
+"
+>
+
+<div>
+
+<span
+class="panel-kicker"
+style="margin-bottom:5px"
+>
+No notes? Use auto chapter mode
+</span>
+
+<p style="font-size:12px;line-height:1.55">
+Choose your Class 12 subject and chapter.
+Recall will create the study prompt automatically.
+</p>
+
+</div>
+
+<span class="spark" aria-hidden="true">✦</span>
+
+</div>
+
+<label class="label" for="autoSubject">
+Subject
+</label>
+
+<select id="autoSubject" class="field">
+
+<option value="Business Studies" selected>
+Business Studies
+</option>
+
+<option value="Economics">
+Economics
+</option>
+
+<option value="Accountancy">
+Accountancy
+</option>
+
+</select>
+
+<label class="label" for="autoChapter">
+Chapter
+</label>
+
+<select id="autoChapter" class="field">
+
+<option value="">
+Select a chapter
+</option>
+
+<!-- BUSINESS STUDIES -->
+
+<option
+data-subject="Business Studies"
+value="Nature and Significance of Management"
+>
+Nature and Significance of Management
+</option>
+
+<option
+data-subject="Business Studies"
+value="Principles of Management"
+>
+Principles of Management
+</option>
+
+<option
+data-subject="Business Studies"
+value="Business Environment"
+>
+Business Environment
+</option>
+
+<option
+data-subject="Business Studies"
+value="Planning"
+>
+Planning
+</option>
+
+<option
+data-subject="Business Studies"
+value="Organising"
+>
+Organising
+</option>
+
+<option
+data-subject="Business Studies"
+value="Staffing"
+>
+Staffing
+</option>
+
+<option
+data-subject="Business Studies"
+value="Directing"
+>
+Directing
+</option>
+
+<option
+data-subject="Business Studies"
+value="Controlling"
+>
+Controlling
+</option>
+
+<option
+data-subject="Business Studies"
+value="Financial Management"
+>
+Financial Management
+</option>
+
+<option
+data-subject="Business Studies"
+value="Financial Markets"
+>
+Financial Markets
+</option>
+
+<option
+data-subject="Business Studies"
+value="Marketing Management"
+>
+Marketing Management
+</option>
+
+<option
+data-subject="Business Studies"
+value="Consumer Protection"
+>
+Consumer Protection
+</option>
+
+<!-- ECONOMICS -->
+
+<option
+data-subject="Economics"
+value="National Income and Related Aggregates"
+>
+National Income and Related Aggregates
+</option>
+
+<option
+data-subject="Economics"
+value="Money and Banking"
+>
+Money and Banking
+</option>
+
+<option
+data-subject="Economics"
+value="Determination of Income and Employment"
+>
+Determination of Income and Employment
+</option>
+
+<option
+data-subject="Economics"
+value="Government Budget and the Economy"
+>
+Government Budget and the Economy
+</option>
+
+<option
+data-subject="Economics"
+value="Balance of Payments"
+>
+Balance of Payments
+</option>
+
+<option
+data-subject="Economics"
+value="Indian Economy on the Eve of Independence"
+>
+Indian Economy on the Eve of Independence
+</option>
+
+<option
+data-subject="Economics"
+value="Indian Economy 1950–1990"
+>
+Indian Economy 1950–1990
+</option>
+
+<option
+data-subject="Economics"
+value="Liberalisation, Privatisation and Globalisation"
+>
+Liberalisation, Privatisation and Globalisation
+</option>
+
+<option
+data-subject="Economics"
+value="Human Capital Formation"
+>
+Human Capital Formation
+</option>
+
+<option
+data-subject="Economics"
+value="Rural Development"
+>
+Rural Development
+</option>
+
+<option
+data-subject="Economics"
+value="Employment: Growth, Informalisation and Other Issues"
+>
+Employment: Growth, Informalisation and Other Issues
+</option>
+
+<option
+data-subject="Economics"
+value="Environment and Sustainable Development"
+>
+Environment and Sustainable Development
+</option>
+
+<option
+data-subject="Economics"
+value="Development Experience of India"
+>
+Development Experience of India
+</option>
+
+<!-- ACCOUNTANCY -->
+
+<option
+data-subject="Accountancy"
+value="Accounting for Partnership Firms – Fundamentals"
+>
+Accounting for Partnership Firms – Fundamentals
+</option>
+
+<option
+data-subject="Accountancy"
+value="Change in Profit Sharing Ratio"
+>
+Change in Profit Sharing Ratio
+</option>
+
+<option
+data-subject="Accountancy"
+value="Admission of a Partner"
+>
+Admission of a Partner
+</option>
+
+<option
+data-subject="Accountancy"
+value="Retirement and Death of a Partner"
+>
+Retirement and Death of a Partner
+</option>
+
+<option
+data-subject="Accountancy"
+value="Dissolution of Partnership Firm"
+>
+Dissolution of Partnership Firm
+</option>
+
+<option
+data-subject="Accountancy"
+value="Accounting for Share Capital"
+>
+Accounting for Share Capital
+</option>
+
+<option
+data-subject="Accountancy"
+value="Issue of Debentures"
+>
+Issue of Debentures
+</option>
+
+<option
+data-subject="Accountancy"
+value="Financial Statements of a Company"
+>
+Financial Statements of a Company
+</option>
+
+<option
+data-subject="Accountancy"
+value="Analysis of Financial Statements"
+>
+Analysis of Financial Statements
+</option>
+
+<option
+data-subject="Accountancy"
+value="Accounting Ratios"
+>
+Accounting Ratios
+</option>
+
+<option
+data-subject="Accountancy"
+value="Cash Flow Statement"
+>
+Cash Flow Statement
+</option>
+
+</select>
+
+<button
+id="autoGenerate"
+class="btn secondary full"
+style="margin-top:12px"
+>
+Generate from chapter
+<span aria-hidden="true">✦</span>
+</button>
+
+<p class="note" style="margin-top:9px">
+No textbook upload required. Recall uses a CBSE/NCERT-aligned study prompt and asks the AI to generate concise paraphrased cards.
+</p>
+
+</div>
+
 <label class="label" for="source">
 Your chapter text or notes
+<span style="color:var(--subtle);font-weight:500">
+(optional)
+</span>
 </label>
 
 <textarea
 id="source"
 class="field"
 rows="5"
-placeholder="Paste your notes here. Each useful statement can become a recall card."
+placeholder="Paste your notes here, or use Auto chapter mode above."
 ></textarea>
 
 <div class="row">
@@ -1286,7 +1635,7 @@ Create flashcards
 </button>
 
 <p class="note">
-Your decks stay in this browser. AI-powered flashcards generated from your pasted text.
+Your decks stay in this browser. AI-powered flashcards generated from your pasted text or selected chapter.
 </p>
 
 </div>
@@ -1325,7 +1674,11 @@ Your decks stay in this browser. AI-powered flashcards generated from your paste
 
 </div>
 
-<button id="reviewBtn" class="btn secondary full" style="margin-top:0">
+<button
+id="reviewBtn"
+class="btn secondary full"
+style="margin-top:0"
+>
 Review due cards
 <span aria-hidden="true">→</span>
 </button>
@@ -1513,16 +1866,25 @@ Import backup
 
 </nav>
 
-<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<div
+id="toast"
+class="toast hidden"
+role="status"
+aria-live="polite"
+></div>
 
 <script>
-
 const K='recall-v1';
 
-let db={decks:[],history:[]};
+let db={
+decks:[],
+history:[]
+};
 
 try{
-db=JSON.parse(localStorage.getItem(K))||db
+db=JSON.parse(
+localStorage.getItem(K)
+)||db
 }catch(e){}
 
 let active=null,
@@ -1533,7 +1895,10 @@ done=0;
 const $=x=>document.getElementById(x);
 
 const uid=()=>{
-return Math.random().toString(36).slice(2)+Date.now().toString(36)
+return Math.random()
+.toString(36)
+.slice(2)+Date.now()
+.toString(36)
 };
 
 const esc=s=>String(s).replace(
@@ -1548,28 +1913,45 @@ c=>({
 );
 
 function save(){
-localStorage.setItem(K,JSON.stringify(db));
+
+localStorage.setItem(
+K,
+JSON.stringify(db)
+);
+
 home();
-library()
+library();
+
 }
 
 function say(t){
+
 $('toast').textContent=t;
-$('toast').classList.remove('hidden');
+
+$('toast')
+.classList
+.remove('hidden');
 
 setTimeout(
-()=>$('toast').classList.add('hidden'),
+()=>$('toast')
+.classList
+.add('hidden'),
 3500
-)
+);
+
 }
 
 function go(v){
 
 document
 .querySelectorAll('.view')
-.forEach(x=>x.classList.remove('active'));
+.forEach(
+x=>x.classList.remove('active')
+);
 
-$(v).classList.add('active');
+$(v)
+.classList
+.add('active');
 
 document
 .querySelectorAll('.nav button')
@@ -1581,8 +1963,11 @@ b.dataset.go===v
 );
 
 if(v==='home')home();
+
 if(v==='library')library();
-if(v==='revision')revision()
+
+if(v==='revision')revision();
+
 }
 
 document
@@ -1592,105 +1977,122 @@ b=>b.onclick=()=>go(b.dataset.go)
 );
 
 function all(){
+
 return db.decks.flatMap(
 d=>d.cards.map(
-c=>({...c,deckId:d.id,deckTitle:d.title})
+c=>({
+...c,
+deckId:d.id,
+deckTitle:d.title
+})
 )
-)
+);
+
 }
 
 function due(){
+
 return all().filter(
 c=>!c.due||c.due<=Date.now()
-)
+);
+
 }
 
 function home(){
 
-$('due').textContent=due().length;
+$('due').textContent=
+due().length;
 
-$('total').textContent=all().length;
+$('total').textContent=
+all().length;
 
 $('mastered').textContent=
 all().filter(
-c=>c.reps>=3&&c.interval>=7
+c=>c.interval>=30
 ).length;
 
-let ds=[...db.decks]
+let recent=
+[...db.decks]
 .reverse()
-.slice(0,4);
+.slice(0,5);
 
 $('recent').innerHTML=
-ds.length
+recent.length
 ?
-ds.map(
-d=>`
-<div class="deck">
+recent.map(d=>`
 
-<div class="deck-icon" aria-hidden="true">
-▤
-</div>
+<div class="deck-card">
 
-<div class="deckinfo">
+<div>
 
 <strong>${esc(d.title)}</strong>
 
-<small>
-${d.cards.length} cards
-</small>
+<span>
+${d.cards.length} cards ·
+${new Date(d.created)
+.toLocaleDateString()}
+</span>
 
 </div>
 
 <button
-class="btn secondary small"
+class="btn quiet small"
 onclick="openDeck('${d.id}')"
 >
-Study
+Open →
 </button>
 
 </div>
-`
-).join('')
+
+`).join('')
 :
-'<div class="empty">Your decks will appear here.</div>'
+`
+<div class="empty">
+No decks yet. Create your first one above.
+</div>
+`;
+
 }
 
 function library(){
 
-if(!$('decks'))return;
+let q=
+($('filter')?.value||'')
+.toLowerCase()
+.trim();
 
-let q=($('filter').value||'').toLowerCase();
-
-let ds=[...db.decks]
-.reverse()
+let decks=
+db.decks
 .filter(
-d=>d.title.toLowerCase().includes(q)
-);
+d=>d.title
+.toLowerCase()
+.includes(q)
+)
+.reverse();
 
 $('decks').innerHTML=
-ds.length
+decks.length
 ?
-ds.map(
-d=>`
-<div class="deck">
+decks.map(d=>`
 
-<div class="deck-icon" aria-hidden="true">
-▤
-</div>
+<div class="deck-card">
 
-<div class="deckinfo">
+<div>
 
 <strong>${esc(d.title)}</strong>
 
-<small>
+<span>
 ${d.cards.length} cards ·
-${new Date(d.created).toLocaleDateString()}
-</small>
+${new Date(d.created)
+.toLocaleDateString()}
+</span>
 
 </div>
 
+<div style="display:flex;gap:8px">
+
 <button
-class="btn secondary small"
+class="btn quiet small"
 onclick="openDeck('${d.id}')"
 >
 Study
@@ -1698,161 +2100,220 @@ Study
 
 <button
 class="btn quiet small"
-onclick="del('${d.id}')"
+onclick="deleteDeck('${d.id}')"
 >
-×
+Delete
 </button>
 
 </div>
-`
-).join('')
+
+</div>
+
+`).join('')
 :
-'<div class="empty">No decks yet.</div>'
+`
+<div class="empty">
+No matching decks found.
+</div>
+`;
+
 }
 
-function del(id){
-
-if(confirm('Delete this deck?')){
-
-db.decks=db.decks.filter(
-d=>d.id!==id
+$('filter')?.addEventListener(
+'input',
+library
 );
 
-save()
+function deleteDeck(id){
 
-}
-
-}
-
-$('filter').oninput=library;
-
-function build(title,src,n){
-
-let lines=src
-.split(/\n+/)
-.map(s=>s.trim())
-.filter(s=>s.length>20);
-
-let pts=lines
-.flatMap(
-p=>p.split(
-/(?<=[.!?])\s+(?=[A-Z0-9])/
-)
-)
-.filter(s=>s.length>25)
-.slice(0,n);
-
-if(!pts.length)
-
-return Array.from(
-{length:n},
-(_,i)=>({
-id:uid(),
-type:[
-'Recall',
-'Definition',
-'Golden rule',
-'Application',
-'Trap'
-][i%5],
-q:[
-'What is the central idea of this chapter?',
-'Define an important term from this chapter.',
-'What formula or rule should you remember?',
-'Apply one concept to an example.',
-'What is a common mistake in this topic?'
-][i%5],
-a:'Add your chapter text or notes to generate source-based cards. This is a starter prompt, not a verified answer.',
-due:Date.now(),
-interval:0,
-reps:0,
-lapses:0
-})
+let d=
+db.decks.find(
+x=>x.id===id
 );
 
-return pts.map(
-(p,i)=>{
+if(!d)return;
 
-let colon=p.indexOf(':');
-
-let q,a;
-
-if(colon>3&&colon<65){
-
-q='What is '+p.slice(0,colon)+'?';
-
-a=p.slice(colon+1).trim()||p
-
-}else{
-
-q=[
-'Explain this key idea: ',
-'What should you remember about: ',
-'Recall the main point about: '
-][i%3]
-+
-p.split(/\s+/)
-.slice(0,5)
-.join(' ')
-+
-'…';
-
-a=p
-
-}
-
-return{
-id:uid(),
-type:[
-'Key idea',
-'Recall',
-'Application',
-'Golden rule'
-][i%4],
-q,
-a,
-due:Date.now(),
-interval:0,
-reps:0,
-lapses:0
-}
-
-}
+if(
+!confirm(
+'Delete this deck?'
 )
+)return;
+
+db.decks=
+db.decks.filter(
+x=>x.id!==id
+);
+
+save();
+
+say('Deck deleted.');
 
 }
+
+function buildAutoPrompt(
+subject,
+chapter
+){
+
+return `
+You are an expert CBSE Class 12 ${subject} teacher and board-exam question designer.
+
+Create a high-quality study source for the chapter:
+"${chapter}"
+
+Use your knowledge of the current CBSE Class 12 syllabus and standard NCERT-aligned concepts for this chapter.
+
+The source will be converted into flashcards by another AI step.
+
+Cover the important examinable concepts, definitions, distinctions, features, objectives, functions, processes, principles, formulas, examples, applications and common CBSE exam traps relevant to this chapter.
+
+Prioritise:
+1. NCERT-aligned concepts and terminology.
+2. CBSE board-exam relevance.
+3. Clear definitions and key points.
+4. Competency/application-oriented understanding.
+5. Common student mistakes and confusing concepts.
+6. Important numerical/formula-based concepts where applicable.
+7. Case-study/application points where applicable.
+
+Do NOT invent topics outside the chapter.
+
+Do NOT reproduce long textbook passages verbatim.
+Use concise original paraphrasing.
+
+The final flashcards should be useful for Class 12 CBSE Board preparation, not generic college-level material.
+`.trim();
+
+}
+
+function updateAutoChapters(){
+
+let subject=
+$('autoSubject').value;
+
+let select=
+$('autoChapter');
+
+let options=
+Array.from(
+select.options
+);
+
+let visibleCount=0;
+
+options.forEach(
+option=>{
+
+if(!option.value){
+
+option.hidden=false;
+return;
+
+}
+
+let match=
+option.dataset.subject===subject;
+
+option.hidden=!match;
+
+if(match)
+visibleCount++;
+
+}
+);
+
+select.value='';
+
+}
+
+$('autoSubject')
+.addEventListener(
+'change',
+updateAutoChapters
+);
+
+updateAutoChapters();
+
+$('autoGenerate').onclick=()=>{
+
+let subject=
+$('autoSubject').value;
+
+let chapter=
+$('autoChapter').value;
+
+if(!chapter){
+
+say(
+'Select a chapter first.'
+);
+
+return;
+
+}
+
+$('chapter').value=
+`Class 12 · ${subject} · ${chapter}`;
+
+$('source').value=
+buildAutoPrompt(
+subject,
+chapter
+);
+
+$('generate').click();
+
+};
 
 /* REAL AI GENERATION */
 
 $('generate').onclick=async()=>{
 
-let title=$('chapter').value.trim(),
-src=$('source').value.trim();
+let title=
+$('chapter')
+.value
+.trim();
 
-let n=+$('count').value,
-style=$('level').value;
+let src=
+$('source')
+.value
+.trim();
+
+let n=
++$('count').value;
+
+let style=
+$('level').value;
 
 if(!title)
-return say('Enter a chapter name first.');
+return say(
+'Enter a chapter name first.'
+);
 
 if(!src)
-return say('Paste your chapter text or notes first.');
+return say(
+'Paste your notes or use Auto chapter mode first.'
+);
 
-let btn=$('generate');
+let btn=
+$('generate');
 
 btn.disabled=true;
 
-btn.textContent='Generating AI flashcards...';
+btn.textContent=
+'Generating AI flashcards...';
 
 try{
 
-let res=await fetch(
+let res=
+await fetch(
 'https://recall-final.borrowed-lassi.workers.dev',
 {
 method:'POST',
 
 headers:{
-'Content-Type':'application/json'
+'Content-Type':
+'application/json'
 },
 
 body:JSON.stringify({
@@ -1869,35 +2330,50 @@ let data;
 
 try{
 
-data=await res.json()
+data=
+await res.json();
 
 }catch(e){
 
 throw Error(
 'The AI service returned an unreadable response.'
-)
+);
 
 }
 
-if(!res.ok||data.error){
+if(
+!res.ok||
+data.error
+){
 
 let detail=
-data.error==='Gemini API error'
+data.error===
+'Gemini API error'
 ?
-'Gemini API error: '+JSON.stringify(data.details)
+'Gemini API error: '+
+JSON.stringify(
+data.details
+)
 :
-(data.error||'Request failed: '+res.status);
+(
+data.error||
+'Request failed: '+
+res.status
+);
 
-throw Error(detail)
+throw Error(detail);
 
 }
 
-let cards=(data.cards||[])
+let cards=
+(data.cards||[])
 .filter(
 c=>
 c&&
-typeof c.question==='string'&&
-typeof c.answer==='string'
+typeof c.question===
+'string'&&
+typeof c.answer===
+'string'
 )
 .map(
 c=>({
@@ -1928,11 +2404,17 @@ throw Error(
 );
 
 let d={
+
 id:uid(),
+
 title,
+
 cards,
+
 created:Date.now(),
+
 level:style
+
 };
 
 db.decks.push(d);
@@ -1940,12 +2422,17 @@ db.decks.push(d);
 save();
 
 $('chapter').value='';
+
 $('source').value='';
+
+$('autoChapter').value='';
 
 openDeck(d.id);
 
 say(
-'AI created '+cards.length+' flashcards!'
+'AI created '+
+cards.length+
+' flashcards!'
 );
 
 }catch(e){
@@ -1968,52 +2455,91 @@ btn.innerHTML=
 
 function openDeck(id){
 
-active=db.decks.find(
+active=
+db.decks.find(
 d=>d.id===id
 );
 
 if(!active)
-return say('Deck not found.');
+return say(
+'Deck not found.'
+);
 
 go('lesson');
 
-$('ltitle').textContent=active.title;
+$('ltitle')
+.textContent=
+active.title;
 
-$('lmeta').textContent=
+$('lmeta')
+.textContent=
 active.cards.length+
 ' cards · reveal, recall, rate';
 
-$('done').classList.add('hidden');
+$('done')
+.classList
+.add('hidden');
 
 renderCards(
 active.cards.map(
-c=>({...c,deckId:active.id})
+c=>({
+...c,
+deckId:active.id
+})
 ),
 false
-)
+);
 
 }
 
-function renderCards(cs,rev){
+function renderCards(
+cards,
+reviewMode
+){
+
+queue=cards;
+
+qi=0;
 
 done=0;
 
-$('cards').innerHTML=
-cs.length
-?
-cs.map(
-(c,i)=>`
+$('cards').innerHTML='';
 
-<article class="card" id="c${c.id}">
+if(!cards.length){
+
+$('cards').innerHTML=`
+
+<div class="empty">
+No cards available right now.
+</div>
+
+`;
+
+return;
+
+}
+
+cards.forEach(
+(c,i)=>{
+
+let el=
+document.createElement('div');
+
+el.className=
+'flashcard';
+
+el.dataset.index=i;
+
+el.innerHTML=`
 
 <div class="card-top">
 
-<span class="tag">
-${esc(c.type)}
+<span class="card-number">
+${i+1} / ${cards.length}
 </span>
 
-<span class="counter">
-${i+1} / ${cs.length}
+<span class="card-type">
+${esc(c.type||'Recall')}
 </span>
 
 </div>
@@ -2023,395 +2549,479 @@ ${esc(c.q)}
 </div>
 
 <button
-class="btn secondary reveal"
-onclick="reveal('${c.id}')"
+class="reveal"
+onclick="revealCard(${i})"
 >
 Reveal answer
 <span aria-hidden="true">↓</span>
 </button>
 
 <div
-id="a${c.id}"
 class="answer hidden"
+id="answer-${i}"
 >
 ${esc(c.a)}
 </div>
 
 <div
-id="r${c.id}"
-class="rating hidden"
+class="ratings hidden"
+id="ratings-${i}"
 >
 
-<button onclick="rate('${c.id}','again')">
+<span class="rate-label">
+How well did you recall it?
+</span>
+
+<div class="rate-buttons">
+
+<button
+onclick="rateCard(${i},'again')"
+class="rate again"
+>
 Again
 </button>
 
-<button onclick="rate('${c.id}','hard')">
+<button
+onclick="rateCard(${i},'hard')"
+class="rate hard"
+>
 Hard
 </button>
 
-<button onclick="rate('${c.id}','good')">
+<button
+onclick="rateCard(${i},'good')"
+class="rate good"
+>
 Good
 </button>
 
-<button onclick="rate('${c.id}','easy')">
+<button
+onclick="rateCard(${i},'easy')"
+class="rate easy"
+>
 Easy
 </button>
 
 </div>
 
-</article>
+</div>
+
+`;
+
+$('cards').appendChild(el);
+
+}
+);
+
+updateProgress();
+
+}
+
+function revealCard(i){
+
+let answer=
+$('answer-'+i);
+
+let ratings=
+$('ratings-'+i);
+
+answer
+.classList
+.remove('hidden');
+
+ratings
+.classList
+.remove('hidden');
+
+let card=
+document.querySelector(
+`.flashcard[data-index="${i}"]`
+);
+
+if(card)
+card.classList.add(
+'revealed'
+);
+
+}
+
+function updateProgress(){
+
+let total=
+queue.length;
+
+let percent=
+total
+?
+(qi/total)*100
+:
+0;
+
+$('progress').style.width=
+percent+'%';
+
+}
+
+function rateCard(i,rating){
+
+let item=
+queue[i];
+
+let d=
+db.decks.find(
+x=>x.id===item.deckId
+);
+
+if(!d)return;
+
+let card=
+d.cards.find(
+x=>x.id===item.id
+);
+
+if(!card)return;
+
+card.reps=
+(card.reps||0)+1;
+
+if(rating==='again'){
+
+card.lapses=
+(card.lapses||0)+1;
+
+card.interval=0;
+
+card.due=
+Date.now()+
+(10*60*1000);
+
+}
+
+if(rating==='hard'){
+
+card.interval=
+Math.max(
+1,
+Math.round(
+(card.interval||1)*1.5
+)
+);
+
+card.due=
+Date.now()+
+card.interval*24*60*60*1000;
+
+}
+
+if(rating==='good'){
+
+card.interval=
+Math.max(
+1,
+Math.round(
+(card.interval||1)*2.5
+)
+);
+
+card.due=
+Date.now()+
+card.interval*24*60*60*1000;
+
+}
+
+if(rating==='easy'){
+
+card.interval=
+Math.max(
+2,
+Math.round(
+(card.interval||1)*4
+)
+);
+
+card.due=
+Date.now()+
+card.interval*24*60*60*1000;
+
+}
+
+db.history.push({
+
+cardId:card.id,
+
+deckId:d.id,
+
+rating,
+
+time:Date.now()
+
+});
+
+done++;
+
+qi=i+1;
+
+save();
+
+let el=
+document.querySelector(
+`.flashcard[data-index="${i}"]`
+);
+
+if(el){
+
+el.classList.add(
+'rated'
+);
+
+}
+
+if(qi>=queue.length){
+
+$('progress').style.width='100%';
+
+setTimeout(
+finishSession,
+350
+);
+
+return;
+
+}
+
+let next=
+document.querySelector(
+`.flashcard[data-index="${qi}"]`
+);
+
+if(next){
+
+next.scrollIntoView({
+behavior:'smooth',
+block:'center'
+});
+
+}
+
+updateProgress();
+
+}
+
+function finishSession(){
+
+$('cards').innerHTML='';
+
+$('done')
+.classList
+.remove('hidden');
+
+say(
+'Session complete. Nice work.'
+);
+
+}
+function revision(){
+
+let cards=
+due()
+.sort(
+(a,b)=>
+(a.due||0)-
+(b.due||0)
+)
+.slice(0,20);
+
+$('revlist').innerHTML=
+cards.length
+?
+cards.map(
+c=>`
+
+<div class="deck-card">
+
+<div>
+
+<strong>${esc(c.q)}</strong>
+
+<span>
+${esc(c.deckTitle)}
+</span>
+
+</div>
+
+<button
+class="btn quiet small"
+onclick="openDeck('${c.deckId}')"
+>
+Review →
+</button>
+
+</div>
 
 `
 ).join('')
 :
-'<div class="empty">Nothing due right now 🎉</div>';
-
-$('progress').style.width='0%';
-
-if(!cs.length)
-$('done').classList.remove('hidden')
-
-}
-
-function reveal(id){
-
-$('a'+id).classList.remove('hidden');
-
-$('r'+id).classList.remove('hidden');
-
-document
-.querySelector('#c'+id+' .reveal')
-.classList.add('hidden')
-
-}
-
-function rate(id,r){
-
-let c;
-
-for(let d of db.decks){
-
-c=d.cards.find(
-x=>x.id===id
-);
-
-if(c)break
-
-}
-
-if(!c)return;
-
-let days=
-r==='again'
-?
-0.007
-:
-r==='hard'
-?
-Math.max(1,c.interval*1.2||1)
-:
-r==='good'
-?
-(c.interval
-?
-Math.max(2,c.interval*2)
-:
-1)
-:
-(c.interval
-?
-Math.max(4,c.interval*3)
-:
-4);
-
-if(r==='again'){
-
-c.lapses++;
-c.reps=0
-
-}else{
-
-c.reps++
-
-}
-
-c.interval=days;
-
-c.due=
-Date.now()+
-days*86400000;
-
-c.last=r;
-
-c.reviewed=Date.now();
-
-db.history.push({
-id,
-r,
-at:Date.now()
-});
-
-save();
-
-let card=document.getElementById('c'+id);
-
-if(card){
-
-card.style.opacity='.55';
-
-$('r'+id).innerHTML=
-`
-<span style="grid-column:1/-1;color:var(--muted)">
-Saved · next review
-${
-days<.01
-?
-'in about 10 minutes'
-:
-days<1
-?
-'tomorrow'
-:
-'in '+Math.round(days)+' days'
-}
-</span>
-`
-
-}
-
-done++;
-
-let total=
-document.querySelectorAll(
-'#cards .card'
-).length;
-
-$('progress').style.width=
-Math.round(
-done/Math.max(1,total)*100
-)+'%';
-
-if(done>=total){
-
-$('done').classList.remove('hidden');
-
-$('done').scrollIntoView({
-behavior:'smooth',
-block:'center'
-})
-
-}
-
-}
-
-function revision(){
-
-queue=
-due()
-.sort(
-(a,b)=>
-(a.interval||0)-
-(b.interval||0)
-);
-
-$('revlist').innerHTML=
-queue.length
-?
 `
 <div class="panel">
 
-<h2>
-${queue.length} cards due
-</h2>
-
-<p>
-Start with difficult cards first.
-</p>
-
-<button
-class="btn primary"
-id="begin"
-style="width:100%;margin-top:13px"
->
-Start revision →
-</button>
-
+<div class="empty">
+You're all caught up 🎉
 </div>
-`
-:
-`
-<div class="panel empty">
-All caught up. 🎉
-</div>
-`;
-
-if($('begin'))
-
-$('begin').onclick=()=>{
-
-qi=0;
-
-nextReview()
-
-}
-
-}
-
-function nextReview(){
-
-if(qi>=queue.length){
-
-$('revlist').innerHTML=
-'<div class="panel empty">Revision complete 🎉</div>';
-
-home();
-
-return
-
-}
-
-let c=queue[qi];
-
-$('revlist').innerHTML=
-`
-<div class="card">
-
-<div class="tag">
-${esc(c.deckTitle)}
-</div>
-
-<div class="question">
-${esc(c.q)}
-</div>
-
-<button
-class="btn secondary"
-id="rr"
->
-Reveal answer
-</button>
-
-<div
-id="ra"
-class="answer hidden"
->
-${esc(c.a)}
-</div>
-
-<div
-id="rt"
-class="rating hidden"
->
-
-<button data-r="again">
-Again
-</button>
-
-<button data-r="hard">
-Hard
-</button>
-
-<button data-r="good">
-Good
-</button>
-
-<button data-r="easy">
-Easy
-</button>
-
-</div>
-
-<p class="note">
-${qi+1} of ${queue.length}
-</p>
 
 </div>
 `;
 
-$('rr').onclick=()=>{
+}
 
-$('ra').classList.remove('hidden');
+$('reviewBtn').onclick=()=>{
 
-$('rt').classList.remove('hidden');
+let cards=due();
 
-$('rr').classList.add('hidden')
+if(!cards.length){
+
+say(
+'No cards are due right now 🎉'
+);
+
+return;
+
+}
+
+let grouped={};
+
+cards.forEach(
+c=>{
+
+if(!grouped[c.deckId])
+grouped[c.deckId]=[];
+
+grouped[c.deckId].push(c);
+
+}
+);
+
+let firstDeck=
+Object.keys(grouped)[0];
+
+openDeck(firstDeck);
 
 };
-
-document
-.querySelectorAll('#rt button')
-.forEach(
-b=>
-b.onclick=()=>{
-
-rate(c.id,b.dataset.r);
-
-qi++;
-
-nextReview()
-
-}
-)
-
-}
-
-$('reviewBtn').onclick=()=>go('revision');
 
 $('export').onclick=()=>{
 
-let a=document.createElement('a');
-
-a.href=URL.createObjectURL(
+let blob=
 new Blob(
-[JSON.stringify(db,null,2)],
-{type:'application/json'}
+[
+JSON.stringify(
+db,
+null,
+2
 )
+],
+{
+type:'application/json'
+}
 );
 
-a.download='recall-backup.json';
+let url=
+URL.createObjectURL(blob);
+
+let a=
+document.createElement('a');
+
+a.href=url;
+
+a.download=
+'recall-backup.json';
+
+document.body.appendChild(a);
 
 a.click();
 
-URL.revokeObjectURL(a.href)
+a.remove();
+
+URL.revokeObjectURL(url);
+
+say(
+'Backup exported.'
+);
 
 };
 
-$('import').onclick=async()=>{
+$('import').onclick=()=>{
+
+let input=
+$('file');
+
+let file=
+input.files[0];
+
+if(!file){
+
+say(
+'Choose a backup file first.'
+);
+
+return;
+
+}
+
+let reader=
+new FileReader();
+
+reader.onload=()=>{
 
 try{
 
-let f=$('file').files[0];
-
-if(!f)throw Error();
-
-let x=JSON.parse(
-await f.text()
+let imported=
+JSON.parse(
+reader.result
 );
 
-if(!Array.isArray(x.decks))
-throw Error();
+if(
+!imported||
+!Array.isArray(
+imported.decks
+)
+){
 
-db=x;
+throw Error(
+'Invalid Recall backup.'
+);
+
+}
+
+db=imported;
 
 save();
 
-say('Backup imported')
+say(
+'Backup imported successfully.'
+);
+
+input.value='';
 
 }catch(e){
 
 say(
-'Choose a valid Recall JSON backup'
-)
+e.message||
+'Could not import backup.'
+);
 
 }
 
 };
 
+reader.readAsText(file);
+
+};
+
 home();
+
 library();
 
 </script>
 
 </body>
+
 </html>
