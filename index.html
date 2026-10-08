@@ -10,18 +10,17 @@
 
 <style>
 :root{
---bg:#f5f5f7;--card:rgba(255,255,255,.82);--solid:#fff;
+--bg:#f5f5f7;--card:rgba(255,255,255,.86);--solid:#fff;
 --text:#161616;--muted:#6e6e73;--line:rgba(0,0,0,.1);
 --accent:#b8f34a;--blue:#0071e3;--red:#ff3b30;
 --orange:#ff9500;--green:#34c759;
 --shadow:0 18px 60px rgba(0,0,0,.08);--r:24px
 }
 :root.dark{
---bg:#101011;--card:rgba(29,29,31,.84);--solid:#1d1d1f;
+--bg:#101011;--card:rgba(29,29,31,.9);--solid:#1d1d1f;
 --text:#f5f5f7;--muted:#a1a1a6;--line:rgba(255,255,255,.1);
 --shadow:0 20px 60px rgba(0,0,0,.38)
 }
-
 *{box-sizing:border-box}
 html,body{
 margin:0;background:var(--bg);color:var(--text);
@@ -30,34 +29,35 @@ font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
 }
 body{letter-spacing:-.012em}
 button,input,textarea,select{font:inherit}
-button{cursor:pointer}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 button:disabled{opacity:.5;cursor:not-allowed}
 
 .shell{min-height:100vh;display:grid;grid-template-columns:245px 1fr}
-
 .side{
 position:sticky;top:0;height:100vh;padding:18px 14px;
 border-right:1px solid var(--line);
-background:rgba(245,245,247,.68);
+background:rgba(245,245,247,.72);
+-webkit-backdrop-filter:blur(22px);
 backdrop-filter:blur(22px);z-index:10
 }
-.dark .side{background:rgba(16,16,17,.72)}
+:root.dark .side{background:rgba(16,16,17,.82)}
 
 .brand{
 display:flex;gap:10px;align-items:center;
 padding:10px 10px 22px;font-weight:800
 }
-
 .logo{
-width:32px;height:32px;border-radius:11px;
-background:var(--accent);color:#172006;
-display:grid;place-items:center;overflow:hidden
+width:34px;height:34px;border-radius:11px;
+background:var(--accent);
+display:flex;align-items:center;justify-content:center;
+overflow:hidden;flex:none
 }
 .logo svg{
-width:24px;height:24px;fill:none;stroke:currentColor;
-stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round
+width:24px;height:24px;
+fill:none;stroke:#172006;stroke-width:2.7;
+stroke-linecap:round;stroke-linejoin:round
 }
-
+:root.dark .logo svg{stroke:#172006}
 .brand small{
 display:block;color:var(--muted);font-weight:500;
 font-size:11px;margin-top:2px
@@ -68,9 +68,11 @@ font-size:11px;margin-top:2px
 border:0;background:transparent;color:var(--muted);
 padding:11px 12px;border-radius:14px;text-align:left;
 display:flex;gap:11px;align-items:center;
-font-size:14px;font-weight:700
+font-size:14px;font-weight:700;width:100%
 }
-.nav button:hover{background:rgba(127,127,127,.08);color:var(--text)}
+.nav button:hover,.nav button:active{
+background:rgba(127,127,127,.08);color:var(--text)
+}
 .nav button.active{
 background:var(--solid);color:var(--text);
 box-shadow:0 6px 22px rgba(0,0,0,.05)
@@ -141,6 +143,7 @@ gap:16px
 .card{
 background:var(--card);border:1px solid var(--line);
 border-radius:var(--r);box-shadow:var(--shadow);
+-webkit-backdrop-filter:blur(18px);
 backdrop-filter:blur(18px)
 }
 .panel{padding:21px}
@@ -149,7 +152,6 @@ backdrop-filter:blur(18px)
 display:flex;justify-content:space-between;
 gap:12px;align-items:flex-start;margin-bottom:17px
 }
-
 .label{
 display:block;color:var(--muted);
 font-size:11px;font-weight:760;margin:0 0 6px
@@ -157,7 +159,8 @@ font-size:11px;font-weight:760;margin:0 0 6px
 .field{
 width:100%;border:1px solid var(--line);
 background:var(--solid);color:var(--text);
-border-radius:15px;padding:13px 14px;outline:none
+border-radius:15px;padding:13px 14px;outline:none;
+-webkit-appearance:none
 }
 .field:focus{
 border-color:rgba(0,113,227,.5);
@@ -184,7 +187,7 @@ background:var(--card);border-radius:18px
 .deck-icon{
 width:38px;height:38px;border-radius:12px;
 background:rgba(184,243,74,.17);
-display:grid;place-items:center
+display:grid;place-items:center;flex:none
 }
 .deck-main{flex:1;min-width:0}
 .deck-name{
@@ -215,8 +218,7 @@ gap:6px;flex-wrap:wrap
 .tag{
 display:inline-block;background:rgba(127,127,127,.1);
 color:var(--muted);border-radius:7px;
-padding:4px 6px;font-size:9px;
-margin:2px 3px 0 0
+padding:4px 6px;font-size:9px;margin:2px 3px 0 0
 }
 
 .study{max-width:880px;margin:0 auto}
@@ -287,6 +289,7 @@ border:1px dashed var(--line);border-radius:18px
 
 .modal-bg{
 position:fixed;inset:0;background:rgba(0,0,0,.4);
+-webkit-backdrop-filter:blur(7px);
 backdrop-filter:blur(7px);display:none;
 align-items:center;justify-content:center;
 padding:18px;z-index:50
@@ -326,22 +329,20 @@ padding:2px 5px;font-size:9px;color:var(--muted)
 display:flex;position:fixed;
 left:9px;right:9px;bottom:9px;z-index:30;
 padding:5px;border:1px solid var(--line);
-border-radius:21px;background:rgba(255,255,255,.8);
+border-radius:21px;background:rgba(255,255,255,.82);
+-webkit-backdrop-filter:blur(23px);
 backdrop-filter:blur(23px);
 box-shadow:0 16px 45px rgba(0,0,0,.13)
 }
-.dark .mobile{background:rgba(29,29,31,.84)}
+:root.dark .mobile{background:rgba(29,29,31,.9)}
 .mobile button{
 flex:1;border:0;background:transparent;
 color:var(--muted);font-size:9px;
 font-weight:750;padding:8px 2px;border-radius:15px
 }
-.mobile button.active{
-background:var(--solid);color:var(--text)
-}
+.mobile button.active{background:var(--solid);color:var(--text)}
 .mobile i{
-display:block;font-style:normal;
-font-size:15px;margin-bottom:2px
+display:block;font-style:normal;font-size:15px;margin-bottom:2px
 }
 .grid{grid-template-columns:1fr}
 .hero{display:block}
@@ -359,6 +360,7 @@ h1{font-size:36px}
 .row{grid-template-columns:1fr}
 .stats{grid-template-columns:1fr 1fr}
 .metricgrid{grid-template-columns:1fr 1fr}
+.counts{display:block}
 }
 </style>
 </head>
@@ -372,8 +374,8 @@ h1{font-size:36px}
 <div class="brand">
 <div class="logo" aria-label="Recall logo">
 <svg viewBox="0 0 40 40" aria-hidden="true">
-<path d="M11 9h18a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"/>
-<path d="M13 14h14M13 20h10M13 26h7"/>
+<path d="M11 9h18a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3V12a3 3 0 0 1 3-3Z"></path>
+<path d="M13 14h14M13 20h10M13 26h7"></path>
 </svg>
 </div>
 <div>Recall<small>Anki card maker</small></div>
@@ -400,8 +402,8 @@ h1{font-size:36px}
 <header class="top">
 <div class="crumb" id="crumb">Home</div>
 <div class="actions">
-<button class="icon" id="theme">☾</button>
-<button class="btn" id="newCard">＋ New card</button>
+<button class="icon" id="theme" type="button">☾</button>
+<button class="btn" id="newCard" type="button">＋ New card</button>
 </div>
 </header>
 
@@ -416,7 +418,7 @@ A simpler Anki-style workspace. Create cards, study them with spaced repetition,
 and copy a clean TSV straight into Anki.
 </p>
 </div>
-<button class="btn primary" id="studyDue">Study due cards →</button>
+<button class="btn primary" id="studyDue" type="button">Study due cards →</button>
 </div>
 
 <div class="grid">
@@ -429,9 +431,7 @@ and copy a clean TSV straight into Anki.
 <div>
 <div class="eyebrow">Quick add</div>
 <h2>Create a card</h2>
-<p style="margin:0;font-size:12px;color:var(--muted)">
-Manual cards, no AI dependency.
-</p>
+<p style="margin:0;font-size:12px;color:var(--muted)">Manual cards, no AI dependency.</p>
 </div>
 </div>
 
@@ -454,23 +454,20 @@ Manual cards, no AI dependency.
 
 <div class="wrap">
 <label class="label">Front</label>
-<textarea class="field" id="qFront"
-placeholder="Question, term or recall prompt…"></textarea>
+<textarea class="field" id="qFront" placeholder="Question, term or recall prompt…"></textarea>
 </div>
 
 <div class="wrap">
 <label class="label">Back</label>
-<textarea class="field" id="qBack"
-placeholder="Answer, explanation, formula or example…"></textarea>
+<textarea class="field" id="qBack" placeholder="Answer, explanation, formula or example…"></textarea>
 </div>
 
 <div class="wrap">
 <label class="label">Tags</label>
-<input class="field" id="qTags"
-placeholder="bst marketing chapter11">
+<input class="field" id="qTags" placeholder="bst marketing chapter11">
 </div>
 
-<button class="btn primary" id="qAdd">Add card</button>
+<button class="btn primary" id="qAdd" type="button">Add card</button>
 
 </div>
 
@@ -504,20 +501,14 @@ Front ⇥ Back ⇥ Tags. Paste it into Anki's import window.
 
 </div>
 
-<pre id="preview"
-style="margin:0;padding:14px;border-radius:15px;background:var(--solid);
-border:1px solid var(--line);white-space:pre-wrap;word-break:break-word;
-font-size:11px;line-height:1.5;color:var(--muted)">
-Selected cards will appear here.
-</pre>
+<pre id="preview" style="margin:0;padding:14px;border-radius:15px;background:var(--solid);border:1px solid var(--line);white-space:pre-wrap;word-break:break-word;font-size:11px;line-height:1.5;color:var(--muted)">Selected cards will appear here.</pre>
 
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-<button class="btn primary" id="copyAnki">Copy for Anki</button>
-<button class="btn" id="downloadTsv">Download TSV</button>
+<button class="btn primary" id="copyAnki" type="button">Copy for Anki</button>
+<button class="btn" id="downloadTsv" type="button">Download TSV</button>
 </div>
 
 </div>
-
 </div>
 
 <div class="stack">
@@ -528,22 +519,9 @@ Selected cards will appear here.
 <h2 style="margin-top:6px">Your queue.</h2>
 
 <div class="stats" style="margin-top:14px">
-
-<div class="stat">
-<strong id="hDue">0</strong>
-<span>Due</span>
-</div>
-
-<div class="stat">
-<strong id="hNew">0</strong>
-<span>New</span>
-</div>
-
-<div class="stat">
-<strong id="hTotal">0</strong>
-<span>Total</span>
-</div>
-
+<div class="stat"><strong id="hDue">0</strong><span>Due</span></div>
+<div class="stat"><strong id="hNew">0</strong><span>New</span></div>
+<div class="stat"><strong id="hTotal">0</strong><span>Total</span></div>
 </div>
 
 </div>
@@ -555,17 +533,14 @@ Selected cards will appear here.
 <div class="eyebrow">Decks</div>
 <h2>Your library.</h2>
 </div>
-<button class="btn" data-view="decks">All decks</button>
+<button class="btn" data-view="decks" type="button">All decks</button>
 </div>
 
 <div class="decks" id="homeDecks"></div>
 
 </div>
-
 </div>
-
 </div>
-
 </section>
 
 <section class="view" id="study">
@@ -574,50 +549,28 @@ Selected cards will appear here.
 <div>
 <div class="eyebrow">Spaced repetition</div>
 <h1>Study.</h1>
-<p class="lead">
-Review what is due and build intervals gradually.
-</p>
+<p class="lead">Review what is due and build intervals gradually.</p>
 </div>
 </div>
 
 <div class="study">
 
 <div id="chooser" class="card panel">
-
 <div class="row">
-
 <div class="wrap">
 <label class="label">Deck</label>
 <select class="field" id="sDeck"></select>
 </div>
-
 <div style="display:flex;align-items:flex-end">
-<button class="btn primary" id="start" style="width:100%">
-Start session
-</button>
+<button class="btn primary" id="start" type="button" style="width:100%">Start session</button>
 </div>
-
 </div>
 
 <div class="stats" style="margin-top:10px">
-
-<div class="stat">
-<strong id="sDue">0</strong>
-<span>Due</span>
+<div class="stat"><strong id="sDue">0</strong><span>Due</span></div>
+<div class="stat"><strong id="sNew">0</strong><span>New</span></div>
+<div class="stat"><strong id="sTotal">0</strong><span>Total</span></div>
 </div>
-
-<div class="stat">
-<strong id="sNew">0</strong>
-<span>New</span>
-</div>
-
-<div class="stat">
-<strong id="sTotal">0</strong>
-<span>Total</span>
-</div>
-
-</div>
-
 </div>
 
 <div id="nothing" style="display:none;margin-top:12px"></div>
@@ -626,79 +579,58 @@ Start session
 
 <div class="study-top">
 <strong id="sTitle"></strong>
-<button class="btn" id="exit">Exit</button>
+<button class="btn" id="exit" type="button">Exit</button>
 </div>
 
-<div class="bar">
-<div id="bar"></div>
-</div>
+<div class="bar"><div id="bar"></div></div>
 
 <div class="card study-card">
-
 <div class="study-deck" id="sd"></div>
-
 <div class="front" id="sf"></div>
-
 <div class="divide" id="divide" style="display:none"></div>
-
 <div class="back" id="sb" style="display:none"></div>
 
-<button class="btn primary" id="reveal" style="margin-top:25px">
-Show answer
-</button>
-
+<button class="btn primary" id="reveal" type="button" style="margin-top:25px">Show answer</button>
 </div>
 
 <div class="ratings" id="ratings" style="display:none">
 
-<button class="rating again" data-r="again">
-Again
-<small id="t1">1m</small>
+<button class="rating again" data-r="again" type="button">
+Again<small id="t1">1m</small>
 </button>
 
-<button class="rating hard" data-r="hard">
-Hard
-<small id="t2">6m</small>
+<button class="rating hard" data-r="hard" type="button">
+Hard<small id="t2">6m</small>
 </button>
 
-<button class="rating good" data-r="good">
-Good
-<small id="t3">1d</small>
+<button class="rating good" data-r="good" type="button">
+Good<small id="t3">1d</small>
 </button>
 
-<button class="rating easy" data-r="easy">
-Easy
-<small id="t4">4d</small>
+<button class="rating easy" data-r="easy" type="button">
+Easy<small id="t4">4d</small>
 </button>
 
 </div>
 
-<div class="hint">
-Space = show answer · 1–4 = rating
-</div>
+<div class="hint">Space = show answer · 1–4 = rating</div>
 
 <div style="display:flex;justify-content:flex-end;margin-top:10px">
 <span id="count" style="font-size:11px;color:var(--muted)"></span>
 </div>
 
 </div>
-
 </div>
-
 </section>
 
 <section class="view" id="add">
 
 <div class="hero">
-
 <div>
 <div class="eyebrow">Create</div>
 <h1>Add cards.</h1>
-<p class="lead">
-Make one card at a time or paste a TSV list.
-</p>
+<p class="lead">Make one card at a time or paste a TSV list.</p>
 </div>
-
 </div>
 
 <div class="grid">
@@ -723,14 +655,12 @@ Make one card at a time or paste a TSV list.
 
 <div class="wrap">
 <label class="label">Front</label>
-<textarea class="field" id="dFront"
-placeholder="Question or prompt…"></textarea>
+<textarea class="field" id="dFront" placeholder="Question or prompt…"></textarea>
 </div>
 
 <div class="wrap">
 <label class="label">Back</label>
-<textarea class="field" id="dBack"
-placeholder="Answer…"></textarea>
+<textarea class="field" id="dBack" placeholder="Answer…"></textarea>
 </div>
 
 <div class="wrap">
@@ -739,8 +669,8 @@ placeholder="Answer…"></textarea>
 </div>
 
 <div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn primary" id="addOne">Add card</button>
-<button class="btn" id="addNext">Add & next</button>
+<button class="btn primary" id="addOne" type="button">Add card</button>
+<button class="btn" id="addNext" type="button">Add & next</button>
 </div>
 
 </div>
@@ -751,23 +681,18 @@ placeholder="Answer…"></textarea>
 <h2 style="margin-top:6px">Paste TSV.</h2>
 
 <p style="color:var(--muted);font-size:12px;line-height:1.5">
-One row per card:
-<br>
+One row per card:<br>
 <kbd>Front</kbd> TAB <kbd>Back</kbd> TAB <kbd>tags</kbd>
 </p>
 
-<textarea class="field" id="bulk"
-style="min-height:300px"
-placeholder="What is goodwill?&#9;Goodwill is…&#9;accountancy partnership"></textarea>
+<textarea class="field" id="bulk" style="min-height:300px" placeholder="What is goodwill?&#9;Goodwill is…&#9;accountancy partnership"></textarea>
 
 <div style="display:flex;gap:8px;margin-top:10px">
-<button class="btn primary" id="bulkAdd">Import cards</button>
+<button class="btn primary" id="bulkAdd" type="button">Import cards</button>
 </div>
 
 </div>
-
 </div>
-
 </section>
 
 <section class="view" id="browse">
@@ -776,54 +701,35 @@ placeholder="What is goodwill?&#9;Goodwill is…&#9;accountancy partnership"></t
 <div>
 <div class="eyebrow">Browser</div>
 <h1>Find anything.</h1>
-<p class="lead">
-Search, edit, suspend, flag, bury, or delete any saved card.
-</p>
+<p class="lead">Search, edit, suspend, flag, bury, or delete any saved card.</p>
 </div>
 </div>
 
 <div class="tools">
-<input class="field search" id="bSearch"
-placeholder="Search front, back, deck or tag…">
-
+<input class="field search" id="bSearch" placeholder="Search front, back, deck or tag…">
 <select class="field" id="bDeck" style="max-width:220px"></select>
-
-<button class="btn" id="bNew">New only</button>
+<button class="btn" id="bNew" type="button">New only</button>
 </div>
 
-<div class="browser"
-style="color:var(--muted);font-size:9px;text-transform:uppercase;
-letter-spacing:.08em;font-weight:800">
-
-<div>Front</div>
-<div>Back</div>
-<div>Deck / tags</div>
-<div></div>
-
+<div class="browser" style="color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:800">
+<div>Front</div><div>Back</div><div>Deck / tags</div><div></div>
 </div>
 
 <div id="bList"></div>
-
 </section>
 
 <section class="view" id="decks">
 
 <div class="hero">
-
 <div>
 <div class="eyebrow">Organise</div>
 <h1>Your decks.</h1>
-<p class="lead">
-Decks, limits and all your cards stay on this device.
-</p>
+<p class="lead">Decks, limits and all your cards stay on this device.</p>
 </div>
-
-<button class="btn primary" id="newDeck">＋ New deck</button>
-
+<button class="btn primary" id="newDeck" type="button">＋ New deck</button>
 </div>
 
 <div class="decks" id="deckList"></div>
-
 </section>
 
 <section class="view" id="stats">
@@ -832,172 +738,112 @@ Decks, limits and all your cards stay on this device.
 <div>
 <div class="eyebrow">Progress</div>
 <h1>Your stats.</h1>
-<p class="lead">
-Simple review stats for this browser.
-</p>
+<p class="lead">Simple review stats for this browser.</p>
 </div>
 </div>
 
 <div class="metricgrid">
-
-<div class="metric">
-<strong id="stCards">0</strong>
-<span>Total cards</span>
-</div>
-
-<div class="metric">
-<strong id="stReviews">0</strong>
-<span>Reviews</span>
-</div>
-
-<div class="metric">
-<strong id="stAcc">0%</strong>
-<span>Good / Easy</span>
-</div>
-
-<div class="metric">
-<strong id="stMaster">0</strong>
-<span>30d+ intervals</span>
-</div>
-
+<div class="metric"><strong id="stCards">0</strong><span>Total cards</span></div>
+<div class="metric"><strong id="stReviews">0</strong><span>Reviews</span></div>
+<div class="metric"><strong id="stAcc">0%</strong><span>Good / Easy</span></div>
+<div class="metric"><strong id="stMaster">0</strong><span>30d+ intervals</span></div>
 </div>
 
 <div class="grid" style="margin-top:16px">
 
 <div class="card panel">
-
 <div class="eyebrow">Deck health</div>
 <h2 style="margin-top:6px">By deck</h2>
-
 <div class="decks" id="stDecks" style="margin-top:13px"></div>
-
 </div>
 
 <div class="card panel">
-
 <div class="eyebrow">Scheduling</div>
 <h2 style="margin-top:6px">Simple and predictable</h2>
-
 <p style="color:var(--muted);font-size:12px;line-height:1.6;margin:0">
 New cards use short learning steps. Successful review grows the interval;
 Again sends the card back into learning. This app intentionally uses a
-lightweight Anki-like scheduler instead of claiming to reproduce every
-internal Anki algorithm.
+lightweight Anki-like scheduler.
 </p>
-
 </div>
 
 </div>
-
 </section>
 
 <section class="view" id="settings">
 
 <div class="hero">
-
 <div>
 <div class="eyebrow">Preferences</div>
 <h1>Settings.</h1>
-<p class="lead">
-Local persistence, daily limits, theme and backups.
-</p>
+<p class="lead">Local persistence, daily limits, theme and backups.</p>
 </div>
-
 </div>
 
 <div class="grid">
 
 <div class="card panel">
-
 <div class="eyebrow">Study limits</div>
 <h2 style="margin-top:6px">Daily queue</h2>
 
 <div class="wrap" style="margin-top:15px">
 <label class="label">New cards / day</label>
-<input class="field" id="limNew"
-type="number" min="0" max="9999">
+<input class="field" id="limNew" type="number" min="0" max="9999">
 </div>
 
 <div class="wrap">
 <label class="label">Reviews / day</label>
-<input class="field" id="limReviews"
-type="number" min="0" max="99999">
+<input class="field" id="limReviews" type="number" min="0" max="99999">
 </div>
 
-<button class="btn primary" id="saveLimits">
-Save limits
-</button>
-
+<button class="btn primary" id="saveLimits" type="button">Save limits</button>
 </div>
 
 <div class="card panel">
-
 <div class="eyebrow">Appearance</div>
 <h2 style="margin-top:6px">Theme</h2>
-
 <p style="color:var(--muted);font-size:12px;line-height:1.5">
 Switch between a light and dark system-style interface.
 </p>
-
-<button class="btn" id="theme2">
-Toggle theme
-</button>
-
+<button class="btn" id="theme2" type="button">Toggle theme</button>
 </div>
 
 <div class="card panel">
-
 <div class="eyebrow">Backup</div>
 <h2 style="margin-top:6px">Never lose your decks</h2>
-
 <p style="color:var(--muted);font-size:12px;line-height:1.5">
 Export the entire local database as JSON. Import it on another browser
 to restore your cards and review history.
 </p>
 
 <div style="display:flex;gap:8px;flex-wrap:wrap">
-
-<button class="btn primary" id="exportJson">
-Export backup
-</button>
-
-<label class="btn">
-Import backup
-<input id="importJson" type="file"
-accept="application/json" hidden>
+<button class="btn primary" id="exportJson" type="button">Export backup</button>
+<label class="btn">Import backup
+<input id="importJson" type="file" accept="application/json" hidden>
 </label>
-
 </div>
-
 </div>
 
 <div class="card panel">
-
 <div class="eyebrow">Danger zone</div>
 <h2 style="margin-top:6px">Reset library</h2>
-
 <p style="color:var(--muted);font-size:12px;line-height:1.5">
 This clears all local data in this browser. Export first.
 </p>
-
-<button class="btn danger" id="reset">
-Delete all local data
-</button>
-
+<button class="btn danger" id="reset" type="button">Delete all local data</button>
 </div>
 
 </div>
-
 </section>
 
 </main>
 </div>
 
 <nav class="mobile">
-<button data-view="home" class="active"><i>⌂</i>Home</button>
-<button data-view="study"><i>◉</i>Study</button>
-<button data-view="add"><i>＋</i>Add</button>
-<button data-view="more"><i>☰</i>More</button>
+<button data-view="home" class="active" type="button"><i>⌂</i>Home</button>
+<button data-view="study" type="button"><i>◉</i>Study</button>
+<button data-view="add" type="button"><i>＋</i>Add</button>
+<button data-view="more" type="button"><i>☰</i>More</button>
 </nav>
 
 <div class="modal-bg" id="modal">
@@ -1008,7 +854,7 @@ Delete all local data
 <div class="eyebrow">Edit</div>
 <h2 id="mTitle">Card</h2>
 </div>
-<button class="icon" id="mClose">×</button>
+<button class="icon" id="mClose" type="button">×</button>
 </div>
 
 <div id="mBody"></div>
@@ -1022,50 +868,34 @@ Delete all local data
 (function(){
 'use strict';
 
-const KEY='recall-anki-v5';
-const BACKUP='recall-anki-v5-backup';
-const OLD_KEYS=[
+/* =========================
+   STORAGE
+========================= */
+
+var KEY='recall-anki-v6';
+var BACKUP='recall-anki-v6-backup';
+
+var OLD_KEYS=[
+'recall-anki-v5',
 'recall-anki-v4',
 'recall-anki-v3',
 'recall-v1'
 ];
 
-const DAY=86400000;
-const MIN=60000;
+var DAY=86400000;
+var MIN=60000;
 
-let db=load();
-let view='home';
+function $(id){
+return document.getElementById(id);
+}
 
-let session={
-deckId:null,
-queue:[],
-i:0,
-revealed:false
-};
-
-const $=id=>document.getElementById(id);
-
-const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
-
-const esc=s=>String(s==null?'':s).replace(
-/[&<>"']/g,
-c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[c])
-);
-
-const tags=s=>String(s||'')
-.trim()
-.split(/\s+/)
-.filter(Boolean);
+function uid(){
+return Math.random().toString(36).slice(2)+Date.now().toString(36);
+}
 
 function base(){
 return {
-version:5,
+version:6,
 decks:[],
 history:[],
 settings:{
@@ -1076,10 +906,10 @@ dark:false
 };
 }
 
-function deck(name){
+function makeDeck(name){
 return {
 id:uid(),
-name,
+name:name,
 created:Date.now(),
 options:{
 newPerDay:20,
@@ -1089,180 +919,160 @@ cards:[]
 };
 }
 
-function card(x){
-return Object.assign({
-id:uid(),
-type:'basic',
-front:'',
-back:'',
-tags:[],
-created:Date.now(),
-due:Date.now(),
-state:'new',
-interval:0,
-ease:2.5,
-reps:0,
-lapses:0,
-suspended:false,
-buriedUntil:0,
-flag:0
-},x||{});
+function makeCard(x){
+x=x||{};
+
+return {
+id:x.id||uid(),
+type:x.type||'basic',
+front:x.front||'',
+back:x.back||'',
+tags:Array.isArray(x.tags)?x.tags:parseTags(x.tags||''),
+created:x.created||Date.now(),
+due:x.due||Date.now(),
+state:x.state||'new',
+interval:x.interval||0,
+ease:x.ease||2.5,
+reps:x.reps||0,
+lapses:x.lapses||0,
+suspended:!!x.suspended,
+buriedUntil:x.buriedUntil||0,
+flag:x.flag||0
+};
 }
 
-/*
-  IMPORTANT:
-  We keep two copies of the database.
-  If the main localStorage key is missing/corrupt,
-  the backup key can restore the cards/decks.
-*/
+function parseTags(s){
+return String(s||'')
+.trim()
+.split(/\s+/)
+.filter(function(x){return !!x;});
+}
 
 function validDB(x){
 return !!(x&&Array.isArray(x.decks));
-}
-
-function scoreDB(x){
-return x.decks.reduce(
-(n,d)=>n+(Array.isArray(d.cards)?d.cards.length:0),
-0
-)*1000
-+x.decks.length*10
-+(Array.isArray(x.history)?x.history.length:0);
 }
 
 function normalise(x){
 
 if(!validDB(x))return null;
 
-let n=base();
+var n=base();
 
-n.version=5;
+if(Array.isArray(x.history)){
+n.history=x.history;
+}
 
-n.history=Array.isArray(x.history)
-?x.history
-:[];
+if(x.settings&&typeof x.settings==='object'){
+n.settings=Object.assign(n.settings,x.settings);
+}
 
-n.settings=Object.assign(
-n.settings||{},
-x.settings||{}
-);
+n.decks=x.decks.map(function(d){
 
-n.decks=x.decks.map(d=>{
-
-let z=deck(
-d.name||
-d.title||
-'Imported deck'
+var z=makeDeck(
+d.name||d.title||'Imported deck'
 );
 
 z.id=d.id||z.id;
 z.created=d.created||z.created;
 
-z.options=Object.assign(
-z.options,
-d.options||{}
-);
+if(d.options&&typeof d.options==='object'){
+z.options=Object.assign(z.options,d.options);
+}
 
-z.cards=(
-Array.isArray(d.cards)
-?d.cards
-:[]
-).map(c=>card({
+z.cards=Array.isArray(d.cards)
+?d.cards.map(function(c){
 
-id:c.id||uid(),
+var front='';
+var back='';
 
+if(typeof c.front==='string'){
+front=c.front;
+}else if(typeof c.q==='string'){
+front=c.q;
+}
+
+if(typeof c.back==='string'){
+back=c.back;
+}else if(typeof c.a==='string'){
+back=c.a;
+}
+
+return makeCard({
+id:c.id,
 type:c.type||'basic',
+front:front,
+back:back,
+tags:c.tags,
+created:c.created,
+due:c.due,
+state:c.state||((c.interval||0)?'review':'new'),
+interval:c.interval,
+ease:c.ease,
+reps:c.reps,
+lapses:c.lapses,
+suspended:c.suspended,
+buriedUntil:c.buriedUntil,
+flag:c.flag
+});
 
-front:
-c.front??
-c.q??
-'',
-
-back:
-c.back??
-c.a??
-'',
-
-tags:
-Array.isArray(c.tags)
-?c.tags
-:tags(c.tags||''),
-
-created:
-c.created||
-Date.now(),
-
-due:
-c.due||
-Date.now(),
-
-state:
-c.state||
-((c.interval||0)
-?'review'
-:'new'),
-
-interval:c.interval||0,
-
-ease:c.ease||2.5,
-
-reps:c.reps||0,
-
-lapses:c.lapses||0,
-
-suspended:!!c.suspended,
-
-buriedUntil:c.buriedUntil||0,
-
-flag:c.flag||0
-
-}));
+})
+:[ ];
 
 return z;
-
 });
 
 return n;
 }
 
-function readKey(k){
+function readStorage(key){
 
 try{
+var raw=localStorage.getItem(key);
 
-return normalise(
-JSON.parse(
-localStorage.getItem(k)||'null'
-)
-);
+if(!raw)return null;
+
+return normalise(JSON.parse(raw));
 
 }catch(e){
-
 return null;
+}
 
 }
 
+function cardCount(x){
+var n=0;
+
+if(!x||!Array.isArray(x.decks))return 0;
+
+x.decks.forEach(function(d){
+if(Array.isArray(d.cards))n+=d.cards.length;
+});
+
+return n;
 }
 
 function writeDB(x){
 
-let raw=JSON.stringify(x);
+var raw=JSON.stringify(x);
 
+try{
 localStorage.setItem(KEY,raw);
+}catch(e){}
 
+try{
 localStorage.setItem(BACKUP,raw);
+}catch(e){}
 
 }
 
-function load(){
+function loadDB(){
 
-let candidates=[];
+var candidates=[];
+var keys=[KEY,BACKUP].concat(OLD_KEYS);
 
-[
-KEY,
-BACKUP,
-...OLD_KEYS
-].forEach(k=>{
+keys.forEach(function(k){
 
-let x=readKey(k);
+var x=readStorage(k);
 
 if(x)candidates.push(x);
 
@@ -1270,38 +1080,75 @@ if(x)candidates.push(x);
 
 if(candidates.length){
 
-let best=candidates.sort(
-(a,b)=>scoreDB(b)-scoreDB(a)
-)[0];
+candidates.sort(function(a,b){
+return cardCount(b)-cardCount(a);
+});
 
-try{
+var best=candidates[0];
+
 writeDB(best);
-}catch(e){}
 
 return best;
-
 }
 
-let n=base();
+var n=base();
 
-let z=deck(
-'Class 12 — Quick Deck'
-);
+n.decks=[
+makeDeck('Class 12 — Quick Deck')
+];
 
-n.decks=[z];
-
-try{
 writeDB(n);
-}catch(e){}
 
 return n;
+}
+
+var db=loadDB();
+
+var currentView='home';
+
+var session={
+deckId:null,
+queue:[],
+i:0,
+revealed:false
+};
+
+/* =========================
+   UI HELPERS
+========================= */
+
+function esc(s){
+
+return String(s==null?'':s).replace(
+/[&<>"']/g,
+function(c){
+
+var map={
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+};
+
+return map[c];
+}
+);
 
 }
 
-/*
-  Every mutation calls save().
-  We also maintain a backup copy.
-*/
+function toast(message){
+
+$('toast').textContent=message;
+$('toast').style.display='block';
+
+clearTimeout(window.__recallToast);
+
+window.__recallToast=setTimeout(function(){
+$('toast').style.display='none';
+},2600);
+
+}
 
 function save(){
 
@@ -1311,133 +1158,171 @@ writeDB(db);
 
 $('savedText').textContent='Saved just now';
 
-clearTimeout(
-window.__savedTimer
-);
+clearTimeout(window.__recallSaved);
 
-window.__savedTimer=setTimeout(
-()=>{
-$('savedText').textContent=
-'Saved on this device';
-},
-1200
-);
+window.__recallSaved=setTimeout(function(){
+$('savedText').textContent='Saved on this device';
+},1400);
 
 }catch(e){
 
-toast(
-'Storage is full — export a backup.'
-);
+toast('Storage failed — export a backup.');
 
 }
 
 }
-
-/*
-  Ask the browser for persistent storage when supported.
-  This does NOT replace backups, but helps prevent eviction.
-*/
 
 try{
 
-if(
-navigator.storage&&
-navigator.storage.persist
-){
-
-navigator.storage.persist().catch(()=>{});
-
+if(navigator.storage&&navigator.storage.persist){
+navigator.storage.persist().catch(function(){});
 }
 
 }catch(e){}
 
-function toast(t){
-
-$('toast').textContent=t;
-
-$('toast').style.display='block';
-
-clearTimeout(window.__t);
-
-window.__t=setTimeout(
-()=>{
-$('toast').style.display='none';
-},
-2600
-);
-
-}
+/* =========================
+   DATA
+========================= */
 
 function getDeck(id){
-return db.decks.find(
-d=>d.id===id
-);
+
+for(var i=0;i<db.decks.length;i++){
+if(db.decks[i].id===id)return db.decks[i];
 }
 
-function all(){
+return null;
+}
 
-let a=[];
+function allCards(){
 
-db.decks.forEach(d=>{
-d.cards.forEach(c=>{
-a.push(
-Object.assign(
-{
+var result=[];
+
+db.decks.forEach(function(d){
+
+d.cards.forEach(function(c){
+
+result.push({
 deckId:d.id,
-deckName:d.name
-},
-c
-)
-);
-});
+deckName:d.name,
+card:c
 });
 
-return a;
+});
 
+});
+
+return result;
 }
 
 function available(c){
 
 return !c.suspended&&
-(
-!c.buriedUntil||
-c.buriedUntil<=Date.now()
-);
+(!c.buriedUntil||c.buriedUntil<=Date.now());
 
 }
 
-function due(d){
+function dueCards(d){
 
-return d.cards.filter(
-c=>
-available(c)&&
-(!c.due||c.due<=Date.now())
-);
+return d.cards.filter(function(c){
+return available(c)&&(!c.due||c.due<=Date.now());
+});
 
 }
 
-function fresh(d){
+function newCards(d){
 
-return d.cards.filter(
-c=>
-available(c)&&
-c.state==='new'
-);
+return d.cards.filter(function(c){
+return available(c)&&c.state==='new';
+});
 
 }
 
-function stats(d){
+function deckStats(d){
 
 return {
-due:due(d).length,
-new:fresh(d).length,
+due:dueCards(d).length,
+new:newCards(d).length,
 total:d.cards.length,
-suspended:d.cards.filter(
-c=>c.suspended
-).length
+suspended:d.cards.filter(function(c){
+return c.suspended;
+}).length
 };
 
 }
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function nav(v){
+
+if(v==='more'){
+v='settings';
+}
+
+if(!$(''+v))return;
+
+currentView=v;
+
+document.querySelectorAll('.view').forEach(function(x){
+x.classList.remove('on');
+});
+
+$(''+v).classList.add('on');
+
+document.querySelectorAll('[data-view]').forEach(function(b){
+
+var target=b.getAttribute('data-view');
+
+b.classList.toggle(
+'active',
+target===v
+);
+
+});
+
+var names={
+home:'Home',
+study:'Study',
+add:'Add cards',
+browse:'Browse',
+decks:'Decks',
+stats:'Stats',
+settings:'Settings'
+};
+
+$('crumb').textContent=names[v]||'Recall';
+
+window.scrollTo(0,0);
+
+if(v==='study'){
+updateStudy();
+}
+
+if(v==='browse'){
+renderBrowse();
+}
+
+}
+
+document.addEventListener('click',function(e){
+
+var button=e.target.closest('[data-view]');
+
+if(button){
+
+e.preventDefault();
+
+nav(button.getAttribute('data-view'));
+
+return;
+}
+
+});
+
+/* =========================
+   THEME
+========================= */
 
 function applyTheme(){
 
@@ -1451,297 +1336,203 @@ db.settings.dark?'☀':'☾';
 
 }
 
-function nav(v){
-
-if(v==='more')v='settings';
-
-view=v;
-
-document
-.querySelectorAll('.view')
-.forEach(x=>x.classList.remove('on'));
-
-$(v).classList.add('on');
-
-document
-.querySelectorAll('[data-view]')
-.forEach(
-b=>
-b.classList.toggle(
-'active',
-b.dataset.view===v
-)
-);
-
-$('crumb').textContent=({
-home:'Home',
-study:'Study',
-add:'Add cards',
-browse:'Browse',
-decks:'Decks',
-stats:'Stats',
-settings:'Settings'
-})[v]||'Recall';
-
-window.scrollTo({
-top:0,
-behavior:'smooth'
-});
-
-if(v==='study')
-updateStudy();
-
-if(v==='browse')
-renderBrowse();
-
-}
-
-document
-.querySelectorAll('[data-view]')
-.forEach(
-b=>
-b.addEventListener(
-'click',
-()=>{
-nav(b.dataset.view)
-}
-)
-);
-
-$('theme').onclick=toggleTheme;
-$('theme2').onclick=toggleTheme;
-
 function toggleTheme(){
 
 db.settings.dark=!db.settings.dark;
 
 save();
-
 render();
 
 }
 
-$('newCard').onclick=()=>nav('add');
+$('theme').addEventListener('click',toggleTheme);
+$('theme2').addEventListener('click',toggleTheme);
 
-$('studyDue').onclick=()=>{
+/* =========================
+   SELECTS
+========================= */
 
-let d=
-db.decks.find(
-x=>due(x).length
-)||
-db.decks[0];
+function fillSelects(){
 
-if(!d)return;
-
-nav('study');
-
-$('sDeck').value=d.id;
-
-updateStudy();
-
-startStudy(d.id);
-
-};
-
-function selects(){
-
-[
+var ids=[
 'qDeck',
 'aDeck',
 'dDeck',
 'sDeck',
 'bDeck'
-].forEach(id=>{
+];
 
-let el=$(id);
+ids.forEach(function(id){
 
-let old=el.value;
+var el=$(id);
+
+if(!el)return;
+
+var old=el.value;
 
 el.innerHTML='';
 
 if(id==='bDeck'){
 
-let o=document.createElement('option');
+var all=document.createElement('option');
 
-o.value='';
+all.value='';
+all.textContent='All decks';
 
-o.textContent='All decks';
-
-el.appendChild(o);
+el.appendChild(all);
 
 }
 
-db.decks.forEach(d=>{
+db.decks.forEach(function(d){
 
-let o=document.createElement('option');
+var option=document.createElement('option');
 
-o.value=d.id;
+option.value=d.id;
+option.textContent=d.name;
 
-o.textContent=d.name;
-
-el.appendChild(o);
+el.appendChild(option);
 
 });
 
-if(old&&getDeck(old))
+if(old&&getDeck(old)){
 el.value=old;
-else if(db.decks[0])
+}else if(db.decks.length){
 el.value=db.decks[0].id;
+}
 
 });
 
 }
 
-function deckHtml(d,buttons){
+/* =========================
+   HOME
+========================= */
 
-let s=stats(d);
+function deckHTML(d,buttons){
 
-return `
-<div class="deck">
+var s=deckStats(d);
 
-<div class="deck-icon">▤</div>
-
-<div class="deck-main">
-
-<div class="deck-name">
-${esc(d.name)}
-</div>
-
-<div class="deck-meta">
-${s.total} cards · ${s.suspended} suspended
-</div>
-
-</div>
-
-<div class="counts">
-<span class="due">${s.due} due</span>
-<span class="new">${s.new} new</span>
-</div>
-
-${buttons}
-
-</div>
-`;
+return '<div class="deck">'+
+'<div class="deck-icon">▤</div>'+
+'<div class="deck-main">'+
+'<div class="deck-name">'+esc(d.name)+'</div>'+
+'<div class="deck-meta">'+s.total+' cards · '+s.suspended+' suspended</div>'+
+'</div>'+
+'<div class="counts">'+
+'<span class="due">'+s.due+' due</span>'+
+'<span class="new">'+s.new+' new</span>'+
+'</div>'+
+buttons+
+'</div>';
 
 }
 
 function renderHome(){
 
-let ds=db.decks;
-let a=all();
+var total=0;
+var due=0;
+var fresh=0;
 
-$('hDue').textContent=
-ds.reduce(
-(n,d)=>n+due(d).length,
-0
-);
+db.decks.forEach(function(d){
 
-$('hNew').textContent=
-ds.reduce(
-(n,d)=>n+fresh(d).length,
-0
-);
+var s=deckStats(d);
 
-$('hTotal').textContent=a.length;
+total+=s.total;
+due+=s.due;
+fresh+=s.new;
 
-$('homeDecks').innerHTML=
-ds.length
-?
-ds
-.slice()
-.sort(
-(a,b)=>b.created-a.created
-)
-.slice(0,5)
-.map(
-d=>
-deckHtml(
-d,
-`
-<div style="display:flex;gap:6px">
-<button class="btn"
-data-go-study="${d.id}">
-Study
-</button>
+});
 
-<button class="btn"
-data-go-copy="${d.id}">
-Copy
-</button>
-</div>
-`
-)
-)
-.join('')
-:
-'<div class="empty">No decks yet.</div>';
+$('hDue').textContent=due;
+$('hNew').textContent=fresh;
+$('hTotal').textContent=total;
 
+if(!db.decks.length){
+
+$('homeDecks').innerHTML='<div class="empty">No decks yet.</div>';
+
+return;
 }
 
-function renderDecks(){
+$('homeDecks').innerHTML=db.decks
+.slice()
+.sort(function(a,b){
+return b.created-a.created;
+})
+.slice(0,5)
+.map(function(d){
 
-$('deckList').innerHTML=
-db.decks.map(
-d=>
-deckHtml(
+return deckHTML(
 d,
-`
-<div style="display:flex;gap:6px">
-<button class="btn"
-data-edit-deck="${d.id}">
-Edit
-</button>
+'<div style="display:flex;gap:6px">'+
+'<button class="btn" type="button" data-go-study="'+d.id+'">Study</button>'+
+'<button class="btn" type="button" data-go-copy="'+d.id+'">Copy</button>'+
+'</div>'
+);
 
-<button class="btn"
-data-study-deck="${d.id}">
-Study
-</button>
-</div>
-`
-)
-)
+})
 .join('');
 
 }
 
+/* =========================
+   DECKS
+========================= */
+
+function renderDecks(){
+
+if(!db.decks.length){
+
+$('deckList').innerHTML='<div class="empty">No decks yet.</div>';
+
+return;
+}
+
+$('deckList').innerHTML=db.decks.map(function(d){
+
+return deckHTML(
+d,
+'<div style="display:flex;gap:6px">'+
+'<button class="btn" type="button" data-edit-deck="'+d.id+'">Edit</button>'+
+'<button class="btn" type="button" data-study-deck="'+d.id+'">Study</button>'+
+'</div>'
+);
+
+}).join('');
+
+}
+
+/* =========================
+   BROWSER
+========================= */
+
 function renderBrowse(){
 
-let q=
-($('bSearch').value||'')
-.toLowerCase()
-.trim();
+var q=String($('bSearch').value||'').toLowerCase().trim();
+var did=$('bDeck').value;
+var onlyNew=$('bNew').classList.contains('primary');
 
-let did=$('bDeck').value;
+var rows=[];
 
-let onlyNew=
-$('bNew').classList.contains('primary');
-
-let rows=[];
-
-db.decks.forEach(d=>{
+db.decks.forEach(function(d){
 
 if(did&&d.id!==did)return;
 
-d.cards.forEach(c=>{
+d.cards.forEach(function(c){
 
-if(
-q&&
-!(
-String(c.front).toLowerCase().includes(q)||
-String(c.back).toLowerCase().includes(q)||
-d.name.toLowerCase().includes(q)||
-c.tags.join(' ').toLowerCase().includes(q)
-)
-)return;
+var hay=
+String(c.front||'').toLowerCase()+' '+
+String(c.back||'').toLowerCase()+' '+
+String(d.name||'').toLowerCase()+' '+
+c.tags.join(' ').toLowerCase();
 
-if(
-onlyNew&&
-c.state!=='new'
-)return;
+if(q&&hay.indexOf(q)===-1)return;
+
+if(onlyNew&&c.state!=='new')return;
 
 rows.push({
-d,
-c
+d:d,
+c:c
 });
 
 });
@@ -1750,192 +1541,130 @@ c
 
 if(!rows.length){
 
-$('bList').innerHTML=
-'<div class="empty">No cards found.</div>';
+$('bList').innerHTML='<div class="empty">No cards found.</div>';
 
 return;
+}
+
+$('bList').innerHTML=rows.map(function(row){
+
+var d=row.d;
+var c=row.c;
+
+return '<div class="browser">'+
+'<div class="browser-text">'+esc(c.front)+'</div>'+
+'<div class="browser-text browser-muted">'+esc(c.back)+'</div>'+
+'<div class="browser-text"><strong>'+esc(d.name)+'</strong><br>'+
+c.tags.map(function(t){
+return '<span class="tag">'+esc(t)+'</span>';
+}).join('')+
+'</div>'+
+'<div class="browser-actions">'+
+'<button class="btn" type="button" data-edit-card="'+d.id+'|'+c.id+'">Edit</button>'+
+'<button class="btn" type="button" data-suspend-card="'+d.id+'|'+c.id+'">'+
+(c.suspended?'Resume':'Suspend')+
+'</button>'+
+'<button class="btn danger" type="button" data-delete-card="'+d.id+'|'+c.id+'">Delete</button>'+
+'</div>'+
+'</div>';
+
+}).join('');
 
 }
 
-$('bList').innerHTML=
-rows.map(
-({d,c})=>
-`
-<div class="browser">
-
-<div class="browser-text">
-${esc(c.front)}
-</div>
-
-<div class="browser-text browser-muted">
-${esc(c.back)}
-</div>
-
-<div class="browser-text">
-<strong>${esc(d.name)}</strong>
-<br>
-${c.tags.map(
-t=>`<span class="tag">${esc(t)}</span>`
-).join('')}
-</div>
-
-<div class="browser-actions">
-
-<button class="btn"
-data-edit-card="${d.id}|${c.id}">
-Edit
-</button>
-
-<button class="btn"
-data-suspend-card="${d.id}|${c.id}">
-${c.suspended?'Resume':'Suspend'}
-</button>
-
-<button class="btn danger"
-data-delete-card="${d.id}|${c.id}">
-Delete
-</button>
-
-</div>
-
-</div>
-`
-)
-.join('');
-
-}
+/* =========================
+   STATS
+========================= */
 
 function renderStats(){
 
-let a=all();
+var cards=allCards();
+var reviews=db.history.length;
 
-let reviews=
-db.history.length;
+var good=db.history.filter(function(x){
+return x.rating==='good'||x.rating==='easy';
+}).length;
 
-let good=
-db.history.filter(
-x=>x.rating==='good'||
-x.rating==='easy'
-).length;
+var master=cards.filter(function(x){
+return (x.card.interval||0)>=30;
+}).length;
 
-let master=
-a.filter(
-c=>(c.interval||0)>=30
-).length;
-
-$('stCards').textContent=a.length;
+$('stCards').textContent=cards.length;
 $('stReviews').textContent=reviews;
-
-$('stAcc').textContent=
-reviews
-?
-Math.round(good/reviews*100)+'%'
-:'0%';
-
+$('stAcc').textContent=reviews?
+Math.round(good/reviews*100)+'%':'0%';
 $('stMaster').textContent=master;
 
-$('stDecks').innerHTML=
-db.decks.map(
-d=>
-deckHtml(d,'')
-).join('');
+$('stDecks').innerHTML=db.decks.map(function(d){
+return deckHTML(d,'');
+}).join('');
 
 }
+
+/* =========================
+   SETTINGS
+========================= */
 
 function renderSettings(){
 
-$('limNew').value=
-db.settings.newLimit;
-
-$('limReviews').value=
-db.settings.reviewLimit;
+$('limNew').value=db.settings.newLimit;
+$('limReviews').value=db.settings.reviewLimit;
 
 }
 
+/* =========================
+   STUDY
+========================= */
+
 function updateStudy(){
 
-let d=
-getDeck($('sDeck').value)||
-db.decks[0];
+var d=getDeck($('sDeck').value);
+
+if(!d&&db.decks.length){
+d=db.decks[0];
+}
 
 if(!d)return;
 
 $('sDeck').value=d.id;
 
+var s=deckStats(d);
+
 $('sTitle').textContent=d.name;
-
-let s=stats(d);
-
 $('sDue').textContent=s.due;
 $('sNew').textContent=s.new;
 $('sTotal').textContent=s.total;
 
 }
 
-$('sDeck').onchange=()=>{
-
-if(
-$('studyUI').style.display!=='none'
-)
-exitStudy();
-
-updateStudy();
-
-};
-
-$('start').onclick=()=>
-startStudy(
-$('sDeck').value
-);
-
-$('exit').onclick=exitStudy;
-
-$('reveal').onclick=reveal;
-
-document
-.querySelectorAll('[data-r]')
-.forEach(
-b=>
-b.onclick=()=>
-rate(b.dataset.r)
-);
-
 function startStudy(id){
 
-let d=getDeck(id);
+var d=getDeck(id);
 
 if(!d)return;
 
-let q=
-due(d)
-.slice()
-.sort(
-(a,b)=>
-(a.state==='new'?0:1)-
-(b.state==='new'?0:1)||
-(a.due||0)-
-(b.due||0)
-);
+var queue=dueCards(d).slice();
 
-let ns=
-q
-.filter(c=>c.state==='new')
-.slice(
-0,
-d.options.newPerDay==null
-?db.settings.newLimit
-:d.options.newPerDay
-);
+queue.sort(function(a,b){
 
-let rs=
-q
-.filter(c=>c.state!=='new')
-.slice(
-0,
-d.options.reviewsPerDay==null
-?db.settings.reviewLimit
-:d.options.reviewsPerDay
-);
+var an=a.state==='new'?0:1;
+var bn=b.state==='new'?0:1;
+
+if(an!==bn)return an-bn;
+
+return (a.due||0)-(b.due||0);
+
+});
+
+var ns=queue.filter(function(c){
+return c.state==='new';
+}).slice(0,d.options.newPerDay!=null?
+d.options.newPerDay:db.settings.newLimit);
+
+var rs=queue.filter(function(c){
+return c.state!=='new';
+}).slice(0,d.options.reviewsPerDay!=null?
+d.options.reviewsPerDay:db.settings.reviewLimit);
 
 session={
 deckId:id,
@@ -1950,19 +1679,17 @@ $('nothing').style.display='none';
 if(!session.queue.length){
 
 $('studyUI').style.display='none';
-
 $('nothing').style.display='block';
 
 $('nothing').innerHTML=
 '<div class="empty">Nothing due right now 🎉</div>';
 
 return;
-
 }
 
 $('studyUI').style.display='block';
 
-show();
+showCard();
 
 }
 
@@ -1985,51 +1712,36 @@ updateStudy();
 
 function cloze(text,show){
 
-return String(text||'')
-.replace(
+return String(text||'').replace(
 /\{\{c\d+::(.*?)(?:::.*?)?\}\}/g,
-(_,a)=>
-show
-?a
-:'［ … ］'
+function(match,a){
+return show?a:'［ … ］';
+}
 );
 
 }
 
-function show(){
+function showCard(){
 
-let d=getDeck(session.deckId);
-let c=session.queue[session.i];
+var d=getDeck(session.deckId);
+var c=session.queue[session.i];
 
 if(!d||!c){
 
-finish();
+finishStudy();
 
 return;
-
 }
 
 session.revealed=false;
 
 $('sd').textContent=
-d.name+
-' · '+
-(
-c.type==='cloze'
-?'Cloze'
-:'Basic'
-);
+d.name+' · '+(c.type==='cloze'?'Cloze':'Basic');
 
-$('sf').innerHTML=
-esc(
-c.type==='cloze'
-?cloze(c.front,false)
-:c.front
-)
-.replace(
-/\n/g,
-'<br>'
-);
+var frontText=c.type==='cloze'?
+cloze(c.front,false):c.front;
+
+$('sf').innerHTML=esc(frontText).replace(/\n/g,'<br>');
 
 $('sb').style.display='none';
 $('divide').style.display='none';
@@ -2037,14 +1749,10 @@ $('reveal').style.display='inline-flex';
 $('ratings').style.display='none';
 
 $('count').textContent=
-(session.i+1)+
-' / '+
-session.queue.length;
+(session.i+1)+' / '+session.queue.length;
 
 $('bar').style.width=
-Math.round(
-session.i/session.queue.length*100
-)+'%';
+Math.round(session.i/session.queue.length*100)+'%';
 
 if(c.state==='new'){
 
@@ -2055,33 +1763,12 @@ $('t4').textContent='4d';
 
 }else{
 
-let iv=
-Math.max(
-1,
-c.interval||1
-);
+var iv=Math.max(1,c.interval||1);
 
 $('t1').textContent='10m';
-
-$('t2').textContent=
-Math.max(
-1,
-Math.round(iv*1.2)
-)+'d';
-
-$('t3').textContent=
-Math.max(
-1,
-Math.round(iv*(c.ease||2.5))
-)+'d';
-
-$('t4').textContent=
-Math.max(
-2,
-Math.round(
-iv*((c.ease||2.5)+1)
-)
-)+'d';
+$('t2').textContent=Math.max(1,Math.round(iv*1.2))+'d';
+$('t3').textContent=Math.max(1,Math.round(iv*(c.ease||2.5)))+'d';
+$('t4').textContent=Math.max(2,Math.round(iv*((c.ease||2.5)+1)))+'d';
 
 }
 
@@ -2089,25 +1776,27 @@ iv*((c.ease||2.5)+1)
 
 function reveal(){
 
-let c=session.queue[session.i];
+var c=session.queue[session.i];
 
 if(!c)return;
 
 session.revealed=true;
 
-$('sb').textContent=
-c.type==='cloze'
-?
-cloze(c.front,true)+
-(
-c.back
-?
-'\n\n'+c.back
-:''
-)
-:
-c.back;
+var answer='';
 
+if(c.type==='cloze'){
+
+answer=cloze(c.front,true);
+
+if(c.back){
+answer+='\n\n'+c.back;
+}
+
+}else{
+answer=c.back;
+}
+
+$('sb').textContent=answer;
 $('sb').style.display='block';
 $('divide').style.display='block';
 $('reveal').style.display='none';
@@ -2117,28 +1806,19 @@ $('ratings').style.display='grid';
 
 function schedule(c,r){
 
-let t=Date.now();
+var now=Date.now();
 
-c.reps++;
+c.reps=(c.reps||0)+1;
 
 if(r==='again'){
 
-c.lapses++;
-
-c.ease=
-Math.max(
-1.3,
-(c.ease||2.5)-.2
-);
-
+c.lapses=(c.lapses||0)+1;
+c.ease=Math.max(1.3,(c.ease||2.5)-.2);
 c.state='learning';
-
 c.interval=0;
-
-c.due=t+10*MIN;
+c.due=now+10*MIN;
 
 return;
-
 }
 
 if(c.state==='new'){
@@ -2146,79 +1826,54 @@ if(c.state==='new'){
 if(r==='hard'){
 
 c.state='learning';
-c.due=t+6*MIN;
+c.due=now+6*MIN;
 
 return;
-
 }
 
 if(r==='good'){
 
 c.state='review';
 c.interval=1;
-c.due=t+DAY;
+c.due=now+DAY;
 
 return;
-
 }
 
 c.state='review';
 c.interval=4;
-c.due=t+4*DAY;
+c.due=now+4*DAY;
 
 return;
-
 }
 
-let iv=
-Math.max(
-1,
-c.interval||1
-);
+var iv=Math.max(1,c.interval||1);
 
 if(r==='hard'){
 
-c.ease=
-Math.max(
-1.3,
-(c.ease||2.5)-.15
-);
-
-c.interval=
-Math.max(
-iv+1,
-Math.round(iv*1.2)
-);
+c.ease=Math.max(1.3,(c.ease||2.5)-.15);
+c.interval=Math.max(iv+1,Math.round(iv*1.2));
 
 }else if(r==='good'){
 
-c.interval=
-Math.max(
+c.interval=Math.max(
 iv+1,
-Math.round(
-iv*(c.ease||2.5)
-)
+Math.round(iv*(c.ease||2.5))
 );
 
 }else{
 
-c.ease=
-(c.ease||2.5)+.15;
+c.ease=(c.ease||2.5)+.15;
 
-c.interval=
-Math.max(
+c.interval=Math.max(
 iv+1,
-Math.round(
-iv*((c.ease||2.5)+1)
-)
+Math.round(iv*((c.ease||2.5)+1))
 );
 
 }
 
 c.state='review';
-
-c.due=
-t+c.interval*DAY;
+c.due=now+c.interval*DAY;
 
 }
 
@@ -2226,9 +1881,10 @@ function rate(r){
 
 if(!session.revealed)return;
 
-let c=session.queue[session.i];
+var c=session.queue[session.i];
+var d=getDeck(session.deckId);
 
-let d=getDeck(session.deckId);
+if(!c||!d)return;
 
 schedule(c,r);
 
@@ -2245,277 +1901,88 @@ save();
 
 session.i++;
 
-if(
-session.i>=session.queue.length
-){
+if(session.i>=session.queue.length){
 
 render();
-finish();
+finishStudy();
 
 }else{
 
 render();
-show();
+showCard();
 
 }
 
 }
 
-function finish(){
+function finishStudy(){
 
 $('bar').style.width='100%';
-
 $('studyUI').style.display='none';
-
 $('nothing').style.display='block';
 
 $('nothing').innerHTML=
-`
-<div class="empty">
-Session complete 🎉
-<br>
-<span style="font-size:11px">
-Your next reviews are saved.
-</span>
+'<div class="empty">'+
+'Session complete 🎉'+
+'<br><span style="font-size:11px">Your next reviews are saved.</span>'+
+'<div style="margin-top:12px">'+
+'<button class="btn primary" type="button" id="doneStudy">Back to study</button>'+
+'</div>'+
+'</div>';
 
-<div style="margin-top:12px">
-<button class="btn primary" id="done">
-Back to study
-</button>
-</div>
-
-</div>
-`;
-
-$('done').onclick=()=>{
+$('doneStudy').addEventListener('click',function(){
 
 $('nothing').style.display='none';
 $('chooser').style.display='block';
 updateStudy();
 
-};
+});
 
 }
 
-document.addEventListener(
-'keydown',
-e=>{
+/* =========================
+   ADD CARDS
+========================= */
 
-if(
-view!=='study'||
-$('studyUI').style.display==='none'
-)return;
+function addTo(d,type,front,back,tagText){
 
-if(e.code==='Space'){
-
-e.preventDefault();
-
-if(!session.revealed)
-reveal();
-
-}else if(session.revealed){
-
-if(e.key==='1')rate('again');
-if(e.key==='2')rate('hard');
-if(e.key==='3')rate('good');
-if(e.key==='4')rate('easy');
-
-}
-
-}
-);
-
-function openModal(title,html){
-
-$('mTitle').textContent=title;
-$('mBody').innerHTML=html;
-$('modal').classList.add('open');
-
-}
-
-$('mClose').onclick=closeModal;
-
-$('modal').onclick=e=>{
-
-if(e.target===$('modal'))
-closeModal();
-
-};
-
-function closeModal(){
-
-$('modal').classList.remove('open');
-$('mBody').innerHTML='';
-
-}
-
-function editCard(d,id){
-
-let c=
-d.cards.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-openModal(
-'Edit card',
-`
-<div class="wrap">
-<label class="label">Deck</label>
-
-<select class="field" id="emDeck">
-
-${db.decks.map(
-x=>
-`
-<option value="${x.id}"
-${x.id===d.id?'selected':''}>
-${esc(x.name)}
-</option>
-`
-).join('')}
-
-</select>
-
-</div>
-
-<div class="wrap">
-<label class="label">Front</label>
-<textarea class="field" id="emFront">
-${esc(c.front)}
-</textarea>
-</div>
-
-<div class="wrap">
-<label class="label">Back</label>
-<textarea class="field" id="emBack">
-${esc(c.back)}
-</textarea>
-</div>
-
-<div class="wrap">
-<label class="label">Tags</label>
-<input class="field" id="emTags"
-value="${esc(c.tags.join(' '))}">
-</div>
-
-<div style="display:flex;gap:8px">
-
-<button class="btn primary" id="emSave">
-Save
-</button>
-
-<button class="btn" id="emSuspend">
-${c.suspended?'Resume':'Suspend'}
-</button>
-
-</div>
-`
-);
-
-$('emSave').onclick=()=>{
-
-let td=
-getDeck(
-$('emDeck').value
-);
-
-if(td&&td.id!==d.id){
-
-d.cards=
-d.cards.filter(
-x=>x.id!==c.id
-);
-
-td.cards.push(c);
-
-}
-
-c.front=
-$('emFront').value.trim();
-
-c.back=
-$('emBack').value.trim();
-
-c.tags=
-tags(
-$('emTags').value
-);
-
-save();
-closeModal();
-render();
-
-toast('Card saved.');
-
-};
-
-$('emSuspend').onclick=()=>{
-
-c.suspended=!c.suspended;
-
-save();
-closeModal();
-render();
-
-};
-
-}
-
-function addTo(
-d,
-type,
-front,
-back,
-tagText
-){
-
-if(!d||!front.trim())
+if(!d||!String(front||'').trim()){
 return false;
+}
 
-d.cards.push(
-card({
+d.cards.push(makeCard({
 type:type||'basic',
-front:front.trim(),
-back:(back||'').trim(),
-tags:tags(tagText)
-})
-);
+front:String(front).trim(),
+back:String(back||'').trim(),
+tags:parseTags(tagText)
+}));
 
 return true;
 
 }
 
-function clearAdd(){
+function clearQuick(){
 
 [
-'qFront',
-'qBack',
-'qTags',
-'dFront',
-'dBack',
-'dTags'
-].forEach(
-id=>$(id).value=''
-);
+'qFront','qBack','qTags'
+].forEach(function(id){
+$(id).value='';
+});
 
 }
 
-$('qAdd').onclick=()=>{
+$('qAdd').addEventListener('click',function(){
 
-if(
-addTo(
+if(addTo(
 getDeck($('qDeck').value),
 $('qType').value,
 $('qFront').value,
 $('qBack').value,
 $('qTags').value
-)
-){
+)){
 
 save();
-clearAdd();
+clearQuick();
 render();
 toast('Card added.');
 
@@ -2525,25 +1992,21 @@ toast('Add a front first.');
 
 }
 
-};
+});
 
-$('addOne').onclick=()=>{
+$('addOne').addEventListener('click',function(){
 
-if(
-addTo(
+if(addTo(
 getDeck($('dDeck').value),
 $('dType').value,
 $('dFront').value,
 $('dBack').value,
 $('dTags').value
-)
-){
+)){
 
 save();
 render();
-
 $('dFront').focus();
-
 toast('Card added.');
 
 }else{
@@ -2552,19 +2015,17 @@ toast('Add a front first.');
 
 }
 
-};
+});
 
-$('addNext').onclick=()=>{
+$('addNext').addEventListener('click',function(){
 
-if(
-addTo(
+if(addTo(
 getDeck($('dDeck').value),
 $('dType').value,
 $('dFront').value,
 $('dBack').value,
 $('dTags').value
-)
-){
+)){
 
 save();
 render();
@@ -2575,9 +2036,7 @@ $('dTags').value='';
 
 $('dFront').focus();
 
-toast(
-'Added. Ready for the next card.'
-);
+toast('Added. Ready for the next card.');
 
 }else{
 
@@ -2585,51 +2044,35 @@ toast('Add a front first.');
 
 }
 
-};
+});
 
-$('bulkAdd').onclick=()=>{
+$('bulkAdd').addEventListener('click',function(){
 
-let d=
-getDeck(
-$('dDeck').value
-);
+var d=getDeck($('dDeck').value);
 
-let lines=
-$('bulk')
-.value
+var lines=$('bulk').value
 .replace(/\r/g,'')
 .split('\n')
-.filter(x=>x.trim());
-
-let n=0;
+.filter(function(x){
+return x.trim();
+});
 
 if(!d||!lines.length){
 
-toast(
-'Paste TSV rows first.'
-);
-
+toast('Paste TSV rows first.');
 return;
 
 }
 
-lines.forEach(line=>{
+var n=0;
 
-let p=line.split('\t');
+lines.forEach(function(line){
 
-if(
-p.length>=2&&
-p[0].trim()
-){
+var p=line.split('\t');
 
-addTo(
-d,
-'basic',
-p[0],
-p[1],
-p[2]||''
-);
+if(p.length>=2&&p[0].trim()){
 
+addTo(d,'basic',p[0],p[1],p[2]||'');
 n++;
 
 }
@@ -2639,600 +2082,691 @@ n++;
 if(n){
 
 $('bulk').value='';
-
 save();
 render();
-
-toast(
-n+' cards added.'
-);
+toast(n+' cards added.');
 
 }else{
 
-toast(
-'Use Front[TAB]Back[TAB]tags.'
-);
+toast('Use Front[TAB]Back[TAB]tags.');
 
 }
 
-};
+});
+
+/* =========================
+   ANKI EXPORT
+========================= */
 
 function exportText(deckId,scope){
 
-let d=getDeck(deckId);
+var d=getDeck(deckId);
 
 if(!d)return '';
 
-return d.cards
-.filter(
-c=>
-!c.suspended&&
-(
-scope==='all'||
-(
-scope==='due'&&
-(!c.due||c.due<=Date.now())
-)||
-(
-scope==='new'&&
-c.state==='new'
-)
-)
-)
-.map(
-c=>
-c.front
+return d.cards.filter(function(c){
+
+if(c.suspended)return false;
+
+if(scope==='all')return true;
+
+if(scope==='new')return c.state==='new';
+
+if(scope==='due'){
+return !c.due||c.due<=Date.now();
+}
+
+return true;
+
+}).map(function(c){
+
+return String(c.front||'')
 .replace(/\t/g,' ')
 .replace(/\n/g,' ')
-+
-'\t'+
-c.back
++'\t'+
+String(c.back||'')
 .replace(/\t/g,' ')
 .replace(/\n/g,' ')
-+
-'\t'+
-c.tags.join(' ')
-)
-.join('\n');
++'\t'+
+c.tags.join(' ');
+
+}).join('\n');
 
 }
 
 function preview(){
 
-let t=
-exportText(
+var t=exportText(
 $('aDeck').value,
 $('aScope').value
 );
 
 $('preview').textContent=
-t||
-'Selected cards will appear here.';
+t||'Selected cards will appear here.';
 
 }
 
-$('aDeck').onchange=preview;
-$('aScope').onchange=preview;
+$('aDeck').addEventListener('change',preview);
+$('aScope').addEventListener('change',preview);
 
-async function copy(t){
+function copyText(text){
 
-try{
+if(!text){
+toast('No cards to copy.');
+return;
+}
 
-await navigator.clipboard.writeText(t);
+if(navigator.clipboard&&navigator.clipboard.writeText){
 
-}catch(e){
+navigator.clipboard.writeText(text)
+.then(function(){
+toast('Copied — paste into Anki import.');
+})
+.catch(function(){
+fallbackCopy(text);
+});
 
-let ta=
-document.createElement('textarea');
+}else{
 
-ta.value=t;
+fallbackCopy(text);
+
+}
+
+}
+
+function fallbackCopy(text){
+
+var ta=document.createElement('textarea');
+
+ta.value=text;
+ta.style.position='fixed';
+ta.style.left='-9999px';
 
 document.body.appendChild(ta);
-
+ta.focus();
 ta.select();
 
+try{
 document.execCommand('copy');
+}catch(e){}
 
-ta.remove();
+document.body.removeChild(ta);
 
-}
-
-toast(
-'Copied — paste into Anki import.'
-);
+toast('Copied — paste into Anki import.');
 
 }
 
-function copyForAnki(id){
+$('copyAnki').addEventListener('click',function(){
 
-let t=
-exportText(id,'all');
-
-if(!t){
-
-toast(
-'No cards to copy.'
-);
-
-return;
-
-}
-
-copy(t);
-
-}
-
-$('copyAnki').onclick=()=>{
-
-let t=
+copyText(
 exportText(
+$('aDeck').value,
+$('aScope').value
+)
+);
+
+});
+
+function downloadFile(name,text,type){
+
+var blob=new Blob(
+[text],
+{type:type}
+);
+
+var url=URL.createObjectURL(blob);
+
+var a=document.createElement('a');
+
+a.href=url;
+a.download=name;
+
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+setTimeout(function(){
+URL.revokeObjectURL(url);
+},500);
+
+}
+
+$('downloadTsv').addEventListener('click',function(){
+
+var t=exportText(
 $('aDeck').value,
 $('aScope').value
 );
 
 if(!t){
 
-toast(
-'No cards to copy.'
-);
-
+toast('No cards to download.');
 return;
 
 }
 
-copy(t);
-
-};
-
-$('downloadTsv').onclick=()=>{
-
-let t=
-exportText(
-$('aDeck').value,
-$('aScope').value
-);
-
-if(!t){
-
-toast(
-'No cards to download.'
-);
-
-return;
-
-}
-
-download(
+downloadFile(
 'recall-anki.tsv',
 t,
 'text/tab-separated-values;charset=utf-8'
 );
 
-toast(
-'TSV downloaded.'
-);
+toast('TSV downloaded.');
 
-};
+});
 
-function download(name,text,type){
+/* =========================
+   STUDY CONTROLS
+========================= */
 
-let b=
-new Blob(
-[text],
-{type}
-);
+$('start').addEventListener('click',function(){
+startStudy($('sDeck').value);
+});
 
-let u=
-URL.createObjectURL(b);
+$('exit').addEventListener('click',exitStudy);
+$('reveal').addEventListener('click',reveal);
 
-let a=
-document.createElement('a');
+$('sDeck').addEventListener('change',function(){
 
-a.href=u;
-a.download=name;
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-setTimeout(
-()=>URL.revokeObjectURL(u),
-500
-);
-
+if($('studyUI').style.display!=='none'){
+exitStudy();
 }
-
-$('limNew').onchange=()=>{
-db.settings.newLimit=
-Math.max(
-0,
-Number($('limNew').value)||0
-);
-};
-
-$('limReviews').onchange=()=>{
-db.settings.reviewLimit=
-Math.max(
-0,
-Number($('limReviews').value)||0
-);
-};
-
-$('saveLimits').onclick=()=>{
-
-db.settings.newLimit=
-Math.max(
-0,
-Number($('limNew').value)||0
-);
-
-db.settings.reviewLimit=
-Math.max(
-0,
-Number($('limReviews').value)||0
-);
-
-save();
-render();
-
-toast(
-'Study limits saved.'
-);
-
-};
-
-$('newDeck').onclick=()=>{
-
-openModal(
-'New deck',
-`
-<div class="wrap">
-<label class="label">Deck name</label>
-<input class="field" id="mDeckName"
-placeholder="Class 12 — Economics">
-</div>
-
-<button class="btn primary" id="mCreate">
-Create deck
-</button>
-`
-);
-
-$('mCreate').onclick=()=>{
-
-let name=
-$('mDeckName')
-.value
-.trim();
-
-if(!name){
-
-toast(
-'Enter a deck name.'
-);
-
-return;
-
-}
-
-db.decks.push(
-deck(name)
-);
-
-save();
-closeModal();
-render();
-
-toast(
-'Deck created.'
-);
-
-};
-
-};
-
-document.addEventListener(
-'click',
-e=>{
-
-let b=
-e.target.closest('button');
-
-if(!b)return;
-
-if(b.dataset.goStudy){
-
-let d=getDeck(
-b.dataset.goStudy
-);
-
-if(d){
-
-nav('study');
-
-$('sDeck').value=d.id;
 
 updateStudy();
 
-startStudy(d.id);
+});
 
+document.querySelectorAll('[data-r]').forEach(function(button){
+
+button.addEventListener('click',function(){
+rate(button.getAttribute('data-r'));
+});
+
+});
+
+/* =========================
+   HOME ACTIONS
+========================= */
+
+$('newCard').addEventListener('click',function(){
+nav('add');
+});
+
+$('studyDue').addEventListener('click',function(){
+
+var d=null;
+
+for(var i=0;i<db.decks.length;i++){
+
+if(dueCards(db.decks[i]).length){
+d=db.decks[i];
+break;
 }
 
 }
 
-if(b.dataset.goCopy){
-
-let d=getDeck(
-b.dataset.goCopy
-);
-
-if(d)
-copyForAnki(d.id);
-
+if(!d&&db.decks.length){
+d=db.decks[0];
 }
-
-if(b.dataset.studyDeck){
-
-let d=getDeck(
-b.dataset.studyDeck
-);
-
-if(d){
-
-nav('study');
-
-$('sDeck').value=d.id;
-
-updateStudy();
-
-startStudy(d.id);
-
-}
-
-}
-
-if(b.dataset.editDeck){
-
-let d=getDeck(
-b.dataset.editDeck
-);
 
 if(!d)return;
 
+nav('study');
+
+$('sDeck').value=d.id;
+
+updateStudy();
+startStudy(d.id);
+
+});
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(title,html){
+
+$('mTitle').textContent=title;
+$('mBody').innerHTML=html;
+$('modal').classList.add('open');
+
+}
+
+function closeModal(){
+
+$('modal').classList.remove('open');
+$('mBody').innerHTML='';
+
+}
+
+$('mClose').addEventListener('click',closeModal);
+
+$('modal').addEventListener('click',function(e){
+
+if(e.target===$('modal')){
+closeModal();
+}
+
+});
+
+/* =========================
+   EDIT CARD
+========================= */
+
+function editCard(d,id){
+
+var c=null;
+
+for(var i=0;i<d.cards.length;i++){
+
+if(d.cards[i].id===id){
+c=d.cards[i];
+break;
+}
+
+}
+
+if(!c)return;
+
+var options=db.decks.map(function(x){
+
+return '<option value="'+esc(x.id)+'"'+
+(x.id===d.id?' selected':'')+
+'>'+esc(x.name)+'</option>';
+
+}).join('');
+
 openModal(
-'Edit deck',
-`
-<div class="wrap">
-<label class="label">Deck name</label>
-
-<input class="field"
-id="mDeckName"
-value="${esc(d.name)}">
-</div>
-
-<div style="display:flex;gap:8px">
-
-<button class="btn primary"
-id="mSaveDeck">
-Save
-</button>
-
-<button class="btn danger"
-id="mdelete">
-Delete
-</button>
-
-</div>
-`
+'Edit card',
+'<div class="wrap">'+
+'<label class="label">Deck</label>'+
+'<select class="field" id="emDeck">'+options+'</select>'+
+'</div>'+
+'<div class="wrap">'+
+'<label class="label">Front</label>'+
+'<textarea class="field" id="emFront">'+esc(c.front)+'</textarea>'+
+'</div>'+
+'<div class="wrap">'+
+'<label class="label">Back</label>'+
+'<textarea class="field" id="emBack">'+esc(c.back)+'</textarea>'+
+'</div>'+
+'<div class="wrap">'+
+'<label class="label">Tags</label>'+
+'<input class="field" id="emTags" value="'+esc(c.tags.join(' '))+'">'+
+'</div>'+
+'<div style="display:flex;gap:8px">'+
+'<button class="btn primary" type="button" id="emSave">Save</button>'+
+'<button class="btn" type="button" id="emSuspend">'+
+(c.suspended?'Resume':'Suspend')+
+'</button>'+
+'</div>'
 );
 
-$('mSaveDeck').onclick=()=>{
+$('emSave').addEventListener('click',function(){
 
-let name=
-$('mDeckName')
-.value
-.trim();
+var target=getDeck($('emDeck').value);
 
-if(!name){
+if(target&&target.id!==d.id){
 
-toast(
-'Enter a deck name.'
-);
+d.cards=d.cards.filter(function(x){
+return x.id!==c.id;
+});
 
-return;
+target.cards.push(c);
 
 }
 
-d.name=name;
+c.front=$('emFront').value.trim();
+c.back=$('emBack').value.trim();
+c.tags=parseTags($('emTags').value);
 
 save();
 closeModal();
 render();
+toast('Card saved.');
 
-toast(
-'Deck saved.'
-);
+});
 
-};
-
-$('mdelete').onclick=()=>{
-
-if(db.decks.length<=1){
-
-toast(
-'Keep at least one deck.'
-);
-
-return;
-
-}
-
-if(
-!confirm(
-'Delete this deck and all cards?'
-)
-)return;
-
-db.decks=
-db.decks.filter(
-x=>x.id!==d.id
-);
-
-save();
-closeModal();
-render();
-
-toast(
-'Deck deleted.'
-);
-
-};
-
-}
-
-if(b.dataset.editCard){
-
-let parts=
-b.dataset.editCard.split('|');
-
-let d=getDeck(parts[0]);
-
-if(d)
-editCard(
-d,
-parts[1]
-);
-
-}
-
-if(b.dataset.suspendCard){
-
-let parts=
-b.dataset.suspendCard.split('|');
-
-let d=getDeck(parts[0]);
-
-let c=
-d&&d.cards.find(
-x=>x.id===parts[1]
-);
-
-if(c){
+$('emSuspend').addEventListener('click',function(){
 
 c.suspended=!c.suspended;
 
 save();
+closeModal();
 render();
 
-toast(
-c.suspended
-?'Card suspended.'
-:'Card resumed.'
+});
+
+}
+
+/* =========================
+   NEW DECK
+========================= */
+
+$('newDeck').addEventListener('click',function(){
+
+openModal(
+'New deck',
+'<div class="wrap">'+
+'<label class="label">Deck name</label>'+
+'<input class="field" id="mDeckName" placeholder="Class 12 — Economics">'+
+'</div>'+
+'<button class="btn primary" type="button" id="mCreate">Create deck</button>'
 );
 
+$('mCreate').addEventListener('click',function(){
+
+var name=$('mDeckName').value.trim();
+
+if(!name){
+
+toast('Enter a deck name.');
+return;
+
+}
+
+db.decks.push(makeDeck(name));
+
+save();
+closeModal();
+render();
+
+toast('Deck created.');
+
+});
+
+});
+
+/* =========================
+   EVENT DELEGATION
+========================= */
+
+document.addEventListener('click',function(e){
+
+var b=e.target.closest('button');
+
+if(!b)return;
+
+/* Study deck */
+if(b.getAttribute('data-go-study')){
+
+var d1=getDeck(b.getAttribute('data-go-study'));
+
+if(d1){
+
+nav('study');
+$('sDeck').value=d1.id;
+updateStudy();
+startStudy(d1.id);
+
+}
+
+return;
+
+}
+
+/* Copy deck */
+if(b.getAttribute('data-go-copy')){
+
+var d2=getDeck(b.getAttribute('data-go-copy'));
+
+if(d2){
+
+copyText(exportText(d2.id,'all'));
+
+}
+
+return;
+
+}
+
+/* Study from deck page */
+if(b.getAttribute('data-study-deck')){
+
+var d3=getDeck(b.getAttribute('data-study-deck'));
+
+if(d3){
+
+nav('study');
+$('sDeck').value=d3.id;
+updateStudy();
+startStudy(d3.id);
+
+}
+
+return;
+
+}
+
+/* Edit deck */
+if(b.getAttribute('data-edit-deck')){
+
+var d4=getDeck(b.getAttribute('data-edit-deck'));
+
+if(!d4)return;
+
+openModal(
+'Edit deck',
+'<div class="wrap">'+
+'<label class="label">Deck name</label>'+
+'<input class="field" id="mDeckName" value="'+esc(d4.name)+'">'+
+'</div>'+
+'<div style="display:flex;gap:8px">'+
+'<button class="btn primary" type="button" id="mSaveDeck">Save</button>'+
+'<button class="btn danger" type="button" id="mDeleteDeck">Delete</button>'+
+'</div>'
+);
+
+$('mSaveDeck').addEventListener('click',function(){
+
+var name=$('mDeckName').value.trim();
+
+if(!name){
+
+toast('Enter a deck name.');
+return;
+
+}
+
+d4.name=name;
+
+save();
+closeModal();
+render();
+
+toast('Deck saved.');
+
+});
+
+$('mDeleteDeck').addEventListener('click',function(){
+
+if(db.decks.length<=1){
+
+toast('Keep at least one deck.');
+return;
+
+}
+
+if(!window.confirm('Delete this deck and all cards?')){
+return;
+}
+
+db.decks=db.decks.filter(function(x){
+return x.id!==d4.id;
+});
+
+save();
+closeModal();
+render();
+
+toast('Deck deleted.');
+
+});
+
+return;
+
+}
+
+/* Edit card */
+if(b.getAttribute('data-edit-card')){
+
+var p1=b.getAttribute('data-edit-card').split('|');
+var ed=getDeck(p1[0]);
+
+if(ed){
+editCard(ed,p1[1]);
+}
+
+return;
+
+}
+
+/* Suspend card */
+if(b.getAttribute('data-suspend-card')){
+
+var p2=b.getAttribute('data-suspend-card').split('|');
+var sd=getDeck(p2[0]);
+
+if(sd){
+
+var sc=null;
+
+for(var si=0;si<sd.cards.length;si++){
+
+if(sd.cards[si].id===p2[1]){
+sc=sd.cards[si];
+break;
 }
 
 }
 
-if(b.dataset.deleteCard){
+if(sc){
 
-let parts=
-b.dataset.deleteCard.split('|');
+sc.suspended=!sc.suspended;
 
-let d=getDeck(parts[0]);
+save();
+render();
 
-if(!d)return;
+toast(sc.suspended?'Card suspended.':'Card resumed.');
 
-if(
-!confirm(
-'Delete this card?'
-)
-)return;
+}
 
-d.cards=
-d.cards.filter(
-x=>x.id!==parts[1]
+}
+
+return;
+
+}
+
+/* Delete card */
+if(b.getAttribute('data-delete-card')){
+
+var p3=b.getAttribute('data-delete-card').split('|');
+var dd=getDeck(p3[0]);
+
+if(!dd)return;
+
+if(!window.confirm('Delete this card?')){
+return;
+}
+
+dd.cards=dd.cards.filter(function(x){
+return x.id!==p3[1];
+});
+
+save();
+render();
+
+toast('Card deleted.');
+
+return;
+
+}
+
+});
+
+/* =========================
+   BROWSER FILTER
+========================= */
+
+$('bSearch').addEventListener('input',renderBrowse);
+$('bDeck').addEventListener('change',renderBrowse);
+
+$('bNew').addEventListener('click',function(){
+
+$('bNew').classList.toggle('primary');
+
+renderBrowse();
+
+});
+
+/* =========================
+   LIMITS
+========================= */
+
+$('saveLimits').addEventListener('click',function(){
+
+db.settings.newLimit=Math.max(
+0,
+Number($('limNew').value)||0
+);
+
+db.settings.reviewLimit=Math.max(
+0,
+Number($('limReviews').value)||0
 );
 
 save();
 render();
 
-toast(
-'Card deleted.'
-);
+toast('Study limits saved.');
 
-}
+});
 
-}
-);
+/* =========================
+   BACKUP
+========================= */
 
-$('bSearch').oninput=renderBrowse;
+$('exportJson').addEventListener('click',function(){
 
-$('bDeck').onchange=renderBrowse;
-
-$('bNew').onclick=()=>{
-
-$('bNew').classList.toggle(
-'primary'
-);
-
-renderBrowse();
-
-};
-
-$('exportJson').onclick=()=>{
-
-download(
+downloadFile(
 'recall-backup.json',
 JSON.stringify(db,null,2),
 'application/json'
 );
 
-toast(
-'Backup exported.'
-);
+toast('Backup exported.');
 
-};
+});
 
-$('importJson').onchange=()=>{
+$('importJson').addEventListener('change',function(){
 
-let f=
-$('importJson').files[0];
+var file=$('importJson').files[0];
 
-if(!f)return;
+if(!file)return;
 
-let r=
-new FileReader();
+var reader=new FileReader();
 
-r.onload=()=>{
+reader.onload=function(){
 
 try{
 
-let x=
-JSON.parse(r.result);
+var parsed=JSON.parse(reader.result);
+var restored=normalise(parsed);
 
-let n=
-normalise(x);
+if(!restored){
+throw new Error('Invalid');
+}
 
-if(!n)
-throw 0;
-
-db=n;
+db=restored;
 
 save();
 render();
 
-toast(
-'Backup restored.'
-);
+toast('Backup restored.');
 
 }catch(e){
 
-toast(
-'Invalid Recall backup.'
-);
+toast('Invalid Recall backup.');
 
 }
 
@@ -3240,57 +2774,91 @@ $('importJson').value='';
 
 };
 
-r.readAsText(f);
+reader.readAsText(file);
 
-};
+});
 
-$('reset').onclick=()=>{
+/* =========================
+   RESET
+========================= */
 
-if(
-!confirm(
-'Delete all local data?'
-)
-)return;
+$('reset').addEventListener('click',function(){
+
+if(!window.confirm('Delete all local data?')){
+return;
+}
 
 db=base();
 
 db.decks=[
-deck(
-'Class 12 — Quick Deck'
-)
+makeDeck('Class 12 — Quick Deck')
 ];
 
 save();
 render();
 nav('home');
 
-toast(
-'Library reset.'
-);
+toast('Library reset.');
 
-};
+});
 
-document.addEventListener(
-'visibilitychange',
-()=>{
-if(document.visibilityState==='hidden')
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener('keydown',function(e){
+
+if(currentView!=='study')return;
+if($('studyUI').style.display==='none')return;
+
+if(e.code==='Space'){
+
+e.preventDefault();
+
+if(!session.revealed){
+reveal();
+}
+
+return;
+}
+
+if(!session.revealed)return;
+
+if(e.key==='1')rate('again');
+if(e.key==='2')rate('hard');
+if(e.key==='3')rate('good');
+if(e.key==='4')rate('easy');
+
+});
+
+/* =========================
+   PERSISTENCE
+========================= */
+
+document.addEventListener('visibilitychange',function(){
+
+if(document.visibilityState==='hidden'){
 save();
 }
-);
 
-window.addEventListener(
-'beforeunload',
-()=>{
-try{
-writeDB(db);
-}catch(e){}
-}
-);
+});
+
+window.addEventListener('pagehide',function(){
+save();
+});
+
+window.addEventListener('beforeunload',function(){
+save();
+});
+
+/* =========================
+   MASTER RENDER
+========================= */
 
 function render(){
 
 applyTheme();
-selects();
+fillSelects();
 renderHome();
 renderDecks();
 renderBrowse();
