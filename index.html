@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="Recall — a personal Class 12 Commerce study command centre, planner, resource library and flashcard workspace.">
+<meta name="apple-mobile-web-app-title" content="Recall">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" sizes="180x180" href="recall-icon.png">
+<link rel="icon" type="image/png" sizes="180x180" href="recall-icon.png">
+<title>Recall — Class 12 StudyOS</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f5f5f7;--surface:rgba(255,255,255,.78);--solid:#fff;--text:#171719;
+  --muted:#6e6e73;--line:rgba(60,60,67,.13);--accent:#b8f34a;--accentInk:#172006;
+  --blue:#087cf0;--green:#239b55;--amber:#b7791f;--red:#dc4848;
+  --shadow:0 12px 38px rgba(0,0,0,.065);--shadowFloat:0 24px 70px rgba(0,0,0,.16);
+  --radius:24px;--spring:cubic-bezier(.2,.8,.2,1);--settle:cubic-bezier(.22,.72,0,1);
+}
+:root.dark{
+  color-scheme:dark;--bg:#101012;--surface:rgba(29,29,31,.78);--solid:#1d1d1f;
+  --text:#f5f5f7;--muted:#a1a1a6;--line:rgba(255,255,255,.11);
+  --accent:#d7f58b;--accentInk:#172006;--shadow:0 14px 42px rgba(0,0,0,.27);
+  --shadowFloat:0 24px 80px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:radial-gradient(ellipse at 50% -18%,rgba(184,243,74,.075),transparent 43%),var(--bg);color:var(--text);font:16px/1.48 -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,"Segoe UI",sans-serif;letter-spacing:-.012em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 45%,transparent);outline-offset:2px}
+a{color:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr)}
+.sidebar{height:100vh;position:sticky;top:0;padding:18px 14px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);z-index:20}
+.brand{display:flex;align-items:center;gap:11px;padding:7px 9px 23px}
+.logo{width:48px;height:48px;padding:7px;border:1px solid var(--line);border-radius:15px;background:var(--solid);box-shadow:var(--shadow);display:grid;place-items:center}
+.logo img{width:100%;height:100%;object-fit:contain;transform:scale(1.15)}
+.brand strong{font-size:18px;letter-spacing:-.04em;display:block}
+.brand small,.mobileBrand small{display:block;color:var(--muted);font-size:11px;margin-top:1px}
+.nav{display:grid;gap:4px}
+.nav button{border:0;background:transparent;color:var(--muted);padding:12px 13px;border-radius:15px;text-align:left;display:flex;align-items:center;gap:12px;font-weight:690;font-size:14px;transition:background .18s var(--spring),color .18s var(--spring),transform .18s var(--spring)}
+.nav button:hover{background:rgba(127,127,127,.09);color:var(--text)}
+.nav button.active{background:var(--solid);color:var(--text);box-shadow:0 5px 20px rgba(0,0,0,.05)}
+.nav .ico{width:22px;text-align:center;font-style:normal;font-size:18px}
+.sidebarFoot{position:absolute;left:14px;right:14px;bottom:17px;padding:11px 12px;border:1px solid var(--line);border-radius:15px;background:var(--surface);font-size:11px;color:var(--muted)}
+.sidebarFoot b{color:var(--green);margin-right:5px}
+.main{min-width:0;padding:18px 30px 90px}
+.topbar{max-width:1180px;margin:0 auto 20px;padding:7px 0 14px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:15;background:linear-gradient(to bottom,var(--bg) 65%,color-mix(in srgb,var(--bg) 0%,transparent));}
+.crumb{font-size:13px;color:var(--muted);font-weight:690}
+.topActions{display:flex;gap:8px;align-items:center}
+.mobileBrand{display:none;align-items:center;gap:9px;min-width:0}
+.mobileBrand img{width:39px;height:39px;object-fit:contain;border-radius:12px;padding:5px;background:var(--solid);border:1px solid var(--line)}
+.mobileBrand strong{font-size:15px;display:block;letter-spacing:-.04em}
+.view{display:none;max-width:1180px;margin:0 auto;animation:arrive .28s var(--settle) both}
+.view.on{display:block}
+@keyframes arrive{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:6px 0 24px}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:820;color:var(--muted)}
+h1{font-size:clamp(35px,5vw,51px);line-height:1.02;letter-spacing:-.065em;margin:8px 0 10px;font-weight:780}
+h2{font-size:24px;line-height:1.12;letter-spacing:-.04em;margin:0 0 7px;font-weight:750}
+h3{font-size:16px;line-height:1.2;letter-spacing:-.025em;margin:0 0 8px}
+p{margin:5px 0}
+.lead{color:var(--muted);font-size:15px;line-height:1.55;max-width:65ch}
+.muted{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(18px) saturate(130%);-webkit-backdrop-filter:blur(18px) saturate(130%);min-width:0}
+.panel{padding:21px}
+.cardHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:15px}
+.stack{display:grid;gap:15px;align-content:start}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{padding:14px;border:1px solid var(--line);border-radius:17px;background:var(--solid)}
+.stat strong{display:block;font-size:26px;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.stat span{font-size:10px;color:var(--muted)}
+.btn,.iconBtn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:14px;font-weight:730;transition:transform .18s var(--spring),background .18s var(--spring),box-shadow .18s var(--spring),border-color .18s var(--spring)}
+.btn{padding:10px 14px;font-size:12px;display:inline-flex;gap:7px;align-items:center;justify-content:center;text-decoration:none}
+.iconBtn{width:40px;height:40px;font-size:16px}
+.btn:hover,.iconBtn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.08)}
+.btn:active,.iconBtn:active{transform:scale(.97)}
+.primary{background:var(--accent);color:var(--accentInk);border-color:transparent;box-shadow:0 5px 18px rgba(184,243,74,.15)}
+.subtle{background:var(--solid)}
+.danger{color:var(--red)}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;background:rgba(127,127,127,.1);color:var(--muted);font-size:10px;font-weight:760}
+.pill.green{background:rgba(35,155,85,.11);color:var(--green)}
+.pill.amber{background:rgba(183,121,31,.12);color:var(--amber)}
+.progress{height:8px;border-radius:99px;background:rgba(127,127,127,.16);overflow:hidden}
+.progress>div{height:100%;background:linear-gradient(90deg,#a5dc3d,#d7f58b);border-radius:99px;transition:width .3s var(--spring)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.label{font-size:11px;font-weight:750;color:var(--muted);display:block;margin-bottom:6px}
+.field{width:100%;background:var(--solid);color:var(--text);border:1px solid var(--line);border-radius:13px;padding:11px 12px;outline:none;min-width:0}
+.field:focus{border-color:rgba(8,124,240,.45);box-shadow:0 0 0 4px rgba(8,124,240,.09)}
+textarea.field{min-height:90px;resize:vertical}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formRow{margin-bottom:11px}
+.timeline{display:grid;gap:0}
+.timeItem{display:grid;grid-template-columns:94px 14px minmax(0,1fr);gap:10px;align-items:start;padding:9px 0}
+.timeItem:not(:last-child) .dotCol:after{content:"";display:block;width:1px;height:28px;background:var(--line);margin:5px auto 0}
+.time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:11px;font-weight:750}
+.dot{width:9px;height:9px;margin-top:4px;border-radius:50%;background:var(--accent);border:2px solid color-mix(in srgb,var(--accent) 50%,var(--solid))}
+.timeTitle{font-size:13px;font-weight:730}
+.timeDesc{font-size:11px;color:var(--muted);margin-top:2px}
+.taskList{display:grid;gap:8px}
+.task{display:flex;gap:10px;align-items:flex-start;padding:10px 11px;background:var(--solid);border:1px solid var(--line);border-radius:13px;font-size:12px}
+.task input,.chapterCheck input{width:17px;height:17px;accent-color:#76b82b;flex:0 0 auto;margin:1px 0 0}
+.task.done span,.chapterCheck.done span{text-decoration:line-through;color:var(--muted)}
+.weekTable,.examTable,.sessionTable{width:100%;border-collapse:collapse;min-width:520px}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+th,td{text-align:left;vertical-align:top;padding:12px 13px;border-bottom:1px solid var(--line);font-size:12px}
+th{background:rgba(127,127,127,.08);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:820}
+tr:last-child td{border-bottom:0}
+.weekday{font-weight:780;white-space:nowrap}
+.subjectDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px}
+.calendarList{display:grid;gap:8px}
+.calendarDay{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:var(--surface)}
+.calendarDay.today{border-color:rgba(8,124,240,.5);box-shadow:0 0 0 3px rgba(8,124,240,.08)}
+.dateTag{font-size:11px;font-weight:780;line-height:1.35}
+.dateTag small{display:block;color:var(--muted);font-weight:550}
+.calendarSubject{font-size:12px;font-weight:780}
+.calendarTopic{font-size:11px;color:var(--muted);margin-top:2px}
+.calendarDone{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:10px}
+.calendarDone input{accent-color:#76b82b;width:17px;height:17px}
+.subjectGroup{border:1px solid var(--line);border-radius:17px;background:var(--surface);overflow:hidden}
+.subjectHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 15px;background:rgba(127,127,127,.055)}
+.subjectHead strong{font-size:13px}
+.subjectItems{padding:9px 15px 13px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 15px}
+.chapterCheck{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:11px;color:var(--text)}
+.resourceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.resource{padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--surface);display:flex;flex-direction:column;gap:9px;min-width:0}
+.resourceTop{display:flex;align-items:center;gap:10px}
+.resourceIcon{width:39px;height:39px;border-radius:13px;background:rgba(127,127,127,.1);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.resource h3{margin:0}
+.resource p{color:var(--muted);font-size:11px;line-height:1.45}
+.resourceActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
+.courseProgress{padding:15px;border:1px solid var(--line);border-radius:18px;background:var(--solid)}
+.courseProgress input[type=range]{width:100%;accent-color:#76b82b}
+.videoFrame{width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#000}
+.focusBox{background:linear-gradient(145deg,#182b20,#233d2a);color:#f5f8f0;border-radius:22px;padding:22px;position:relative;overflow:hidden}
+.focusBox:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(190,245,117,.09);right:-55px;top:-95px}
+.timer{font-size:53px;letter-spacing:-.06em;font-weight:780;font-variant-numeric:tabular-nums;line-height:1.05;margin:15px 0}
+.focusBox p{color:#c3d2c0;font-size:11px}
+.focusBox .btn{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.16);color:white}
+.focusBox .btn.primary{background:#d7f58b;color:#172006;border-color:transparent}
+.timerControls{display:flex;gap:7px;flex-wrap:wrap}
+.resourceForm{display:grid;grid-template-columns:1.1fr 1.5fr .7fr auto;gap:8px}
+.flashLayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);gap:14px}
+.flashCard{min-height:220px;padding:28px;border:1px solid var(--line);border-radius:20px;background:var(--solid);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.flashFront{font-size:24px;font-weight:780;letter-spacing:-.04em;line-height:1.22}
+.flashBack{font-size:17px;color:var(--muted);margin-top:22px;white-space:pre-wrap}
+.rateRow{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.rateRow button{padding:10px 5px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:11px;font-weight:780}
+.rateRow small{display:block;color:var(--muted);font-size:9px;font-weight:550}
+.flashList{display:grid;gap:7px;max-height:380px;overflow:auto}
+.flashItem{padding:10px 12px;border:1px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;gap:8px;align-items:center;background:var(--solid);font-size:11px}
+.note{border-left:3px solid var(--amber);background:rgba(183,121,31,.09);padding:11px 13px;border-radius:0 12px 12px 0;font-size:11px;color:var(--text)}
+.divider{height:1px;background:var(--line);margin:15px 0}
+.chipRow{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 9px;border:1px solid var(--line);border-radius:99px;background:var(--solid);font-size:10px;color:var(--muted)}
+.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+.mobileNav{display:none}
+.modalShade{position:fixed;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(10px);z-index:50;display:none;align-items:flex-end;justify-content:center;padding:14px}
+.modalShade.open{display:flex}
+.modal{width:min(560px,100%);background:var(--solid);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadowFloat);animation:sheetIn .28s var(--settle)}
+@keyframes sheetIn{from{opacity:.3;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#202024;color:white;padding:10px 14px;border-radius:13px;font-size:12px;box-shadow:var(--shadowFloat);z-index:90;max-width:calc(100% - 28px)}
+.hidden{display:none!important}
+@media(max-width:900px){
+ .app{grid-template-columns:1fr}.sidebar{display:none}.main{padding:10px 13px calc(100px + env(safe-area-inset-bottom))}
+ .topbar{padding:6px 0 13px;margin-bottom:9px;background:color-mix(in srgb,var(--bg) 83%,transparent);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+ .mobileBrand{display:flex}.crumb{display:none}.topActions{margin-left:auto}
+ .mobileNav{display:flex;position:fixed;left:10px;right:10px;bottom:calc(9px + env(safe-area-inset-bottom));z-index:30;padding:5px;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--solid) 78%,transparent);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);box-shadow:0 16px 44px rgba(0,0,0,.17)}
+ .mobileNav button{flex:1;border:0;background:transparent;color:var(--muted);border-radius:15px;min-height:48px;font-size:9px;font-weight:760}
+ .mobileNav button.active{background:var(--solid);color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.06)}
+ .mobileNav i{display:block;font-style:normal;font-size:17px;margin-bottom:1px}
+ .grid,.flashLayout{grid-template-columns:1fr}.hero{display:block}.hero .btn{margin-top:12px}
+}
+@media(max-width:620px){
+ .main{padding-left:11px;padding-right:11px}.hero{margin-bottom:18px}
+ h1{font-size:37px}.panel{padding:17px;border-radius:21px}.two,.resourceGrid{grid-template-columns:1fr}
+ .three{grid-template-columns:repeat(3,minmax(0,1fr))}.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .subjectItems{grid-template-columns:1fr}.calendarDay{grid-template-columns:70px minmax(0,1fr);}.calendarDone{grid-column:2}
+ .resourceForm{grid-template-columns:1fr 1fr}.resourceForm button{grid-column:span 2}
+ .timer{font-size:49px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
+@media(prefers-reduced-transparency:reduce){
+ .sidebar,.mobileNav,.topbar,.card{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--solid)}
+}
+@media(prefers-contrast:more){
+ :root{--line:rgba(0,0,0,.35)}:root.dark{--line:rgba(255,255,255,.45)}
+ .card,.btn,.field{border-width:2px}
+}
+@media print{
+ .sidebar,.topbar,.mobileNav,.noPrint,.btn,.iconBtn{display:none!important}
+ .app{display:block}.main{padding:0}.view{display:block!important;page-break-after:always}.card{box-shadow:none;background:white;color:black;border:1px solid #bbb}
+ body{background:white;color:black}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo"><img src="recall-logo-black-160.png" alt="Recall logo"></div>
+      <div><strong>Recall</strong><small>Class 12 StudyOS</small></div>
+    </div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="active" data-view="today"><i class="ico">⌂</i>Today</button>
+      <button data-view="plan"><i class="ico">▦</i>Study plan</button>
+      <button data-view="resources"><i class="ico">⌘</i>Resource library</button>
+      <button data-view="flashcards"><i class="ico">▤</i>Flashcards</button>
+      <button data-view="exams"><i class="ico">◷</i>Exam roadmap</button>
+      <button data-view="methods"><i class="ico">✳</i>Study system</button>
+      <button data-view="settings"><i class="ico">⚙</i>Settings</button>
+    </nav>
+    <div class="sidebarFoot"><b>●</b><span id="saveStatus">Saved on this device</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="mobileBrand"><img src="recall-logo-black-160.png" alt="Recall logo"><div><strong>Recall</strong><small>Class 12 StudyOS</small></div></div>
+      <div class="crumb" id="crumb">Today</div>
+      <div class="topActions">
+        <button class="iconBtn" id="themeBtn" aria-label="Toggle dark mode">☾</button>
+        <button class="btn primary" data-goto="resources">Open resources ↗</button>
+      </div>
+    </header>
+
+    <!-- TODAY -->
+    <section class="view on" id="today">
+      <div class="hero">
+        <div><div class="eyebrow" id="dateLabel">YOUR STUDY DAY</div><h1 id="greeting">Make today count.</h1><p class="lead">A realistic plan for the shop, gym and five CBSE subjects. One focused morning block moves the needle.</p></div>
+        <button class="btn primary" id="startFocus">Start 50-minute focus ↗</button>
+      </div>
+      <div class="grid">
+        <div class="stack">
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Today at a glance</div><h2 id="todayTitle">Your next study block</h2><p class="small" id="todaySub">Your schedule adapts to the day of the week.</p></div><span class="pill green" id="todayStatus">Plan active</span></div>
+            <div class="three">
+              <div class="stat"><strong id="todaySubject">—</strong><span>Morning subject</span></div>
+              <div class="stat"><strong>60m</strong><span>Deep study</span></div>
+              <div class="stat"><strong>10m</strong><span>3 PM recall</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="row"><strong style="font-size:13px">Today's task</strong><span class="small" id="todayTaskDay"></span></div>
+            <p id="todayTask" style="font-size:13px;font-weight:700;margin-top:7px">Choose a task in the study plan.</p>
+            <div class="row" style="margin-top:12px"><span class="small" id="todayTaskProgress">Not marked complete</span><button class="btn" id="todayDone">Mark complete</button></div>
+          </div>
+
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Daily routine</div><h2>Built around your real day</h2></div><span class="pill">Mon–Sun</span></div>
+            <div class="timeline">
+              <div class="timeItem"><div class="time">6:00 AM</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Wake up</div><div class="timeDesc">Water, wash up. No social media.</div></div></div>
+              <div class="timeItem"><div class="time">6:10–7:10</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Morning deep study</div><div class="timeDesc">Hardest subject of the day. Phone away.</div></div></div>
+              <div class="timeItem"><div class="time">7:30–9:00</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Gym</div><div class="timeDesc">Keep intensity manageable when fatigued.</div></div></div>
+              <div class="timeItem"><div class="time">9:00–10:00</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Breakfast, shower, get ready</div></div></div>
+              <div class="timeItem"><div class="time">10:00–3:00</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Shop</div></div></div>
+              <div class="timeItem"><div class="time">3:00–3:10</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Spaced recall</div><div class="timeDesc">Flashcards, formulas or yesterday's topic.</div></div></div>
+              <div class="timeItem"><div class="time">3:10–3:30</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Lunch</div></div></div>
+              <div class="timeItem"><div class="time">3:30–7:30</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Shop</div></div></div>
+              <div class="timeItem"><div class="time">8:00 PM</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Home and transition</div></div></div>
+              <div class="timeItem"><div class="time">8:05–8:25</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Evening micro-session</div><div class="timeDesc">English, PE or Accountancy mistakes, depending on the day.</div></div></div>
+              <div class="timeItem"><div class="time">8:30–9:45</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Egg meal, dinner and social time</div></div></div>
+              <div class="timeItem"><div class="time">10:00 PM</div><div class="dotCol"><div class="dot"></div></div><div><div class="timeTitle">Sleep</div><div class="timeDesc">Protect eight hours. Do not borrow from sleep.</div></div></div>
+            </div>
+            <p class="note">If waking at 6 AM makes you consistently exhausted, shift to 6:15 AM and a 45-minute session. Do not compensate by cutting sleep.</p>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="focusBox">
+            <div class="eyebrow" style="color:#c3d2c0">FOCUS TIMER</div>
+            <div class="timer" id="timerDisplay">50:00</div>
+            <p id="timerCaption">One uninterrupted study block. Start before motivation starts negotiating.</p>
+            <div class="timerControls">
+              <button class="btn primary" id="timerToggle">Start</button>
+              <button class="btn" id="timerReset">Reset</button>
+              <button class="btn" id="timerMode">50 / 10</button>
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Daily audit</div><h2>Did you show up?</h2></div><span class="pill green" id="habitCount">0 / 5</span></div>
+            <div class="progress"><div id="habitBar" style="width:0%"></div></div>
+            <div class="taskList" id="habitList" style="margin-top:12px"></div>
+          </div>
+
+          <div class="card panel">
+            <div class="eyebrow">Pre-board countdown</div><h2 id="preboardTitle" style="margin-top:6px">Date not announced</h2>
+            <p class="small" id="preboardText">Add the date when your school publishes the pre-board timetable.</p>
+            <button class="btn" data-goto="settings" style="margin-top:10px">Set pre-board date</button>
+          </div>
+
+          <div class="card panel">
+            <div class="eyebrow">Current priorities</div><h2 style="margin-top:6px">Backlog focus</h2>
+            <div class="taskList" style="margin-top:12px">
+              <div class="task"><span>01</span><div><b>Accountancy</b><div class="small">Convert theory into numerical accuracy.</div></div></div>
+              <div class="task"><span>02</span><div><b>Business Studies</b><div class="small">Build NCERT coverage and case application.</div></div></div>
+              <div class="task"><span>03</span><div><b>Economics</b><div class="small">Concepts, numericals, diagrams and IED.</div></div></div>
+              <div class="task"><span>04</span><div><b>English + PE</b><div class="small">Frequent short sessions; don't postpone.</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAN -->
+    <section class="view" id="plan">
+      <div class="hero"><div><div class="eyebrow">20 NOVEMBER – 31 DECEMBER 2026</div><h1>Study plan.</h1><p class="lead">A six-week first-pass calendar. The morning subjects follow your fixed weekly rotation, with evening work kept deliberately short.</p></div><span class="pill green">Pre-board sprint</span></div>
+      <div class="grid">
+        <div class="stack">
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Weekly rotation</div><h2>Same rhythm every week</h2></div></div>
+            <div class="tableWrap"><table class="weekTable"><thead><tr><th>Day</th><th>6:10–7:10 AM</th><th>8:05–8:25 PM</th></tr></thead><tbody>
+              <tr><td class="weekday">Monday</td><td>Accountancy</td><td>English</td></tr>
+              <tr><td class="weekday">Tuesday</td><td>Business Studies</td><td>Physical Education</td></tr>
+              <tr><td class="weekday">Wednesday</td><td>Economics</td><td>English</td></tr>
+              <tr><td class="weekday">Thursday</td><td>Accountancy</td><td>Physical Education</td></tr>
+              <tr><td class="weekday">Friday</td><td>Business Studies</td><td>Accountancy mistake bank</td></tr>
+              <tr><td class="weekday">Saturday</td><td>Economics</td><td>English</td></tr>
+              <tr><td class="weekday">Sunday</td><td>Physical Education</td><td>Weekly review</td></tr>
+            </tbody></table></div>
+            <p class="small" style="margin-top:10px">The 3 PM session is always 10 minutes of spaced recall, followed by lunch. Your shop holiday is irregular, so it is bonus time, not a requirement.</p>
+          </div>
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Date-wise morning plan</div><h2>Chapter calendar</h2><p class="small">Tick each session when its output is complete.</p></div><span class="pill" id="calendarCount">0 / 42</span></div>
+            <div class="progress"><div id="calendarBar" style="width:0%"></div></div>
+            <div class="chipRow" style="margin:13px 0"><span class="chip">Accounts · Mon/Thu</span><span class="chip">BST · Tue/Fri</span><span class="chip">Economics · Wed/Sat</span><span class="chip">PE · Sunday</span></div>
+            <div class="calendarList" id="calendarList"></div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card panel">
+            <div class="eyebrow">Evening rotation</div><h2 style="margin-top:6px">20-minute reinforcement</h2>
+            <p class="small">English on Mon/Wed/Sat, PE on Tue/Thu, Accountancy mistakes on Fri, weekly review on Sun.</p>
+            <div class="divider"></div>
+            <div class="taskList" id="eveningList"></div>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Irregular shop holiday</div><h2 style="margin-top:6px">Bonus study blocks</h2>
+            <div class="tableWrap" style="margin-top:10px"><table class="sessionTable"><tbody>
+              <tr><td><b>9:30–10:20</b></td><td>Accountancy numericals</td></tr>
+              <tr><td><b>10:40–11:30</b></td><td>Weakest BST / Economics chapter</td></tr>
+              <tr><td><b>12:00–12:40</b></td><td>English or PE revision</td></tr>
+            </tbody></table></div>
+            <p class="small" style="margin-top:10px">If tired, do the first two blocks only. Pick the first task the night before; start before social media.</p>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Part B setting</div><h2 style="margin-top:6px">Accountancy option</h2>
+            <p class="small">The chapter calendar currently assumes Analysis of Financial Statements.</p>
+            <label class="label" for="partB" style="margin-top:12px">Your school’s selected option</label>
+            <select class="field" id="partB"><option value="AFS">Analysis of Financial Statements (AFS)</option><option value="CA">Computerised Accounting</option><option value="unknown">Not confirmed yet</option></select>
+            <p class="small" id="partBNote">AFS: Financial Statements, Ratios, Cash Flow and Tools of Analysis.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card panel" style="margin-top:15px">
+        <div class="cardHead"><div><div class="eyebrow">Chapter mastery</div><h2>Five-subject syllabus tracker</h2><p class="small">Mark a chapter complete only after learning it, recalling it without notes and attempting questions.</p></div><span class="pill green" id="syllabusTotal">0 complete</span></div>
+        <div class="progress"><div id="syllabusBar" style="width:0%"></div></div>
+        <div class="stack" id="syllabusGroups" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section class="view" id="resources">
+      <div class="hero"><div><div class="eyebrow">Your study links</div><h1>Resource library.</h1><p class="lead">Your preferred Accountancy lectures, chapter-practice playlist, sample papers and Telegram resource channel in one place.</p></div><span class="pill green">Links integrated</span></div>
+      <div class="grid">
+        <div class="stack">
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Accountancy lecture course</div><h2>Sankalp Class 12 Accounts</h2><p class="small">CA Parag Gupta · Session 2026–27 · 49 lessons</p></div><span class="pill">30 / 49</span></div>
+            <div class="courseProgress">
+              <div class="row"><strong style="font-size:13px">Lecture progress</strong><strong id="lectureCount" style="font-size:13px">30 of 49</strong></div>
+              <div class="progress" style="margin:10px 0"><div id="lectureBar" style="width:61.2%"></div></div>
+              <label class="label" for="lectureRange">Update completed lessons</label>
+              <input id="lectureRange" type="range" min="0" max="49" value="30" style="width:100%;accent-color:#83bd31">
+              <p class="small">Started at 30/49, based on your screenshot. The linked course index lists all 49 video lessons.</p>
+            </div>
+            <div class="resourceActions" style="margin-top:12px">
+              <a class="btn primary" href="https://www.syncstudy.in/course/PLNQu32qLj0W2aD0GZJr7rLDIcSM2A4OWL" target="_blank" rel="noopener">Open 49-lesson course index ↗</a>
+              <a class="btn" href="https://www.youtube.com/watch?v=ExvKEM39byk" target="_blank" rel="noopener">Play Lecture 1 ↗</a><a class="btn" href="https://www.youtube.com/watch?v=KVNS-cdzSbk" target="_blank" rel="noopener">Play Lecture 2 ↗</a><a class="btn" href="https://www.youtube.com/@caparaggupta" target="_blank" rel="noopener">YouTube channel ↗</a>
+            </div>
+            <p class="small" style="margin-top:10px">The course index matches the 49-lesson Sankalp course shown in your screenshot. It is a third-party course index, not a confirmed original YouTube playlist URL.</p>
+          </div>
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Chapter-wise practice</div><h2>Accountancy practice playlist</h2><p class="small">YouTube playlist supplied by you.</p></div><span class="pill green">Your link</span></div>
+            <div class="resourceTop"><div class="resourceIcon">▶</div><div><strong style="font-size:13px">CA Parag Gupta · Mission 80/80</strong><p class="small">14 chapter sessions with PYQs, competency-based questions and tricky MCQs, as described in the channel posts.</p></div></div>
+            <div class="resourceActions" style="margin-top:12px"><a class="btn primary" href="https://www.youtube.com/playlist?list=PLD2zciV6nTMI" target="_blank" rel="noopener">Open practice playlist ↗</a><button class="btn" id="showPlaylist">Preview here</button></div>
+            <div id="playlistPreview" class="hidden" style="margin-top:13px"><iframe class="videoFrame" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLD2zciV6nTMI" title="Accountancy practice playlist" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+          </div>
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Sample papers</div><h2>RKG Institute</h2><p class="small">Sample papers and solutions.</p></div><span class="pill green">Your link</span></div>
+            <div class="resourceTop"><div class="resourceIcon">▤</div><div><strong style="font-size:13px">RKG Institute · Sample Papers</strong><p class="small">Open the sample-paper page and choose the relevant subject paper.</p></div></div>
+            <div class="resourceActions" style="margin-top:12px"><a class="btn primary" href="https://www.rkginstitute.com/sample-papers" target="_blank" rel="noopener">Open sample papers ↗</a></div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Notes, updates and videos</div><h2>CA Parag Gupta on Telegram</h2></div><span class="pill green">Your link</span></div>
+            <p class="small">The public channel is described as a source for Class 11 and Class 12 commerce updates, notes and videos. It also shares practice sheets, MCQs and sample-paper links.</p>
+            <div class="resourceActions" style="margin-top:12px"><a class="btn primary" href="https://t.me/caparaggupta" target="_blank" rel="noopener">Open Telegram channel ↗</a><a class="btn" href="https://t.me/s/caparaggupta" target="_blank" rel="noopener">Preview in browser</a></div>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Official CBSE material</div><h2 style="margin-top:6px">Board resources</h2>
+            <div class="taskList" style="margin-top:12px">
+              <div class="task"><div class="resourceIcon">▣</div><div><b>Class XII 2026–27 SQPs & marking schemes</b><p class="small">Official sample papers and marking schemes for Accountancy, BST, Economics, English and more.</p><a class="btn" href="https://cbseacademic.nic.in/SQP_CLASSXII_2026-27.html" target="_blank" rel="noopener">Open CBSE SQPs ↗</a></div></div>
+              <div class="task"><div class="resourceIcon">▧</div><div><b>Official 2027 date sheet</b><p class="small">CBSE date sheet issued 6 November 2026.</p><a class="btn" href="https://www.cbse.gov.in/cbsenew/documents/Datesheet_ClassX%20_XII_2027_Main_06112026.pdf" target="_blank" rel="noopener">Open date sheet ↗</a></div></div>
+              <div class="task"><div class="resourceIcon">⌕</div><div><b>CBSE previous question papers</b><p class="small">Official previous-year question paper archive.</p><a class="btn" href="https://www.cbse.gov.in/cbsenew/question-paper.html" target="_blank" rel="noopener">Open question papers ↗</a></div></div>
+            </div>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Add your own links</div><h2 style="margin-top:6px">Personal resource shelf</h2><p class="small">Add another playlist, Telegram channel, PDF page or website. These custom links stay saved in this browser.</p>
+            <form id="resourceForm" style="margin-top:12px">
+              <div class="resourceForm">
+                <input class="field" id="resourceName" placeholder="Resource name" required>
+                <input class="field" id="resourceUrl" type="url" placeholder="https://..." required>
+                <select class="field" id="resourceType"><option>Website</option><option>YouTube</option><option>Telegram</option><option>PDF / Notes</option><option>Other</option></select>
+                <button class="btn primary" type="submit">Add link</button>
+              </div>
+            </form>
+            <div id="customResources" class="stack" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FLASHCARDS -->
+    <section class="view" id="flashcards">
+      <div class="hero"><div><div class="eyebrow">Recall workspace</div><h1>Keep what you learn.</h1><p class="lead">Quick flashcards and spaced review. Existing cards saved by your previous Recall site are loaded from its original storage key.</p></div><span class="pill green">Local save</span></div>
+      <div class="flashLayout">
+        <div class="stack">
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Review queue</div><h2 id="flashDeckTitle">Class 12 Quick Deck</h2><p class="small" id="flashQueueText">Review due cards or create a new card.</p></div><span class="pill" id="flashCounts">0 cards</span></div>
+            <div class="formGrid">
+              <div><label class="label" for="flashDeckSelect">Deck</label><select class="field" id="flashDeckSelect"></select></div>
+              <div><label class="label" for="newDeckName">New deck</label><div style="display:flex;gap:6px"><input class="field" id="newDeckName" placeholder="Economics"><button class="btn" type="button" id="createDeck">Add</button></div></div>
+            </div>
+            <div class="divider"></div>
+            <div class="flashCard">
+              <div class="eyebrow" id="flashPosition">READY TO REVIEW</div>
+              <div class="flashFront" id="flashFront" style="margin-top:14px">Create a card or start reviewing.</div>
+              <div class="flashBack hidden" id="flashBack"></div>
+              <button class="btn primary" id="flashReveal" style="margin-top:22px">Reveal answer</button>
+            </div>
+            <div class="rateRow hidden" id="flashRates">
+              <button data-rate="again">Again<small>10 min</small></button>
+              <button data-rate="hard">Hard<small>1 day</small></button>
+              <button data-rate="good">Good<small>3 days</small></button>
+              <button data-rate="easy">Easy<small>7 days</small></button>
+            </div>
+            <div class="row" style="margin-top:12px"><button class="btn" id="startReview">Start due review</button><button class="btn" id="exportFlash">Export TSV</button></div>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Bulk import</div><h2 style="margin-top:6px">Paste cards from a sheet</h2>
+            <p class="small">One line per card: Front, then a TAB, then Back, then optional TAB and tags.</p>
+            <textarea class="field" id="bulkCards" placeholder="What is planning?&#9;Planning is deciding in advance what to do and how to do it.&#9;bst planning" style="min-height:110px;margin-top:9px"></textarea>
+            <button class="btn primary" id="importBulk" style="margin-top:8px">Import cards</button>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card panel">
+            <div class="eyebrow">Create one card</div><h2 style="margin-top:6px">Quick add</h2>
+            <label class="label" for="cardFront" style="margin-top:13px">Question / prompt</label><textarea class="field" id="cardFront" placeholder="What is mutual agency?" rows="3"></textarea>
+            <label class="label" for="cardBack" style="margin-top:10px">Answer</label><textarea class="field" id="cardBack" placeholder="Each partner acts as an agent and principal for the other partners..." rows="4"></textarea>
+            <label class="label" for="cardTags" style="margin-top:10px">Tags (optional)</label><input class="field" id="cardTags" placeholder="accounts partnership">
+            <button class="btn primary" id="addFlashCard" style="margin-top:10px">Add flashcard</button>
+          </div>
+          <div class="card panel">
+            <div class="cardHead"><div><div class="eyebrow">Your collection</div><h2>Cards in this deck</h2></div><span class="pill" id="deckCardCount">0</span></div>
+            <div class="flashList" id="flashCardList"></div>
+            <p class="small" style="margin-top:10px">Cards are stored locally in the same Recall flashcard database used by the previous site. Export a backup regularly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXAMS -->
+    <section class="view" id="exams">
+      <div class="hero"><div><div class="eyebrow">Board examination roadmap</div><h1>Know the dates.</h1><p class="lead">The CBSE Class XII 2027 datesheet was released on 6 November 2026. All five exams below are scheduled for 10:30 AM–1:30 PM.</p></div><a class="btn" href="https://www.cbse.gov.in/cbsenew/documents/Datesheet_ClassX%20_XII_2027_Main_06112026.pdf" target="_blank" rel="noopener">Official PDF ↗</a></div>
+      <div class="card panel">
+        <div class="cardHead"><div><div class="eyebrow">Your five subjects</div><h2>Examination sequence</h2></div><span class="pill green">Official datesheet</span></div>
+        <div class="tableWrap"><table class="examTable"><thead><tr><th>Subject</th><th>Exam date</th><th>Time</th><th>Countdown</th></tr></thead><tbody id="examRows"></tbody></table></div>
+        <p class="small" style="margin-top:10px">Countdowns update from your device date. Check the official PDF and your admit card for final instructions.</p>
+      </div>
+      <div class="grid" style="margin-top:15px">
+        <div class="card panel"><div class="eyebrow">Phase 1 · Until pre-boards</div><h2 style="margin-top:6px">Coverage before perfection</h2><p class="small">Complete one first pass in all subjects. Prioritise Accountancy numerical execution, BST/ Economics foundation and short frequent English/PE sessions.</p></div>
+        <div class="card panel"><div class="eyebrow">Phase 2 · After pre-boards</div><h2 style="margin-top:6px">Repair weak areas</h2><p class="small">Sort mistakes into concept gaps, forgotten information, application errors, calculation/presentation errors and time pressure. Re-test the weak chapters.</p></div>
+        <div class="card panel"><div class="eyebrow">Phase 3 · January</div><h2 style="margin-top:6px">Timed practice</h2><p class="small">Finish remaining syllabus, practise PYQs and timed sections, and increase full-length papers.</p></div>
+        <div class="card panel"><div class="eyebrow">Phase 4 · February onwards</div><h2 style="margin-top:6px">Exam-order revision</h2><p class="small">Prioritise PE then Accountancy, followed by English, Economics and BST. Use each gap for the next examination.</p></div>
+      </div>
+    </section>
+
+    <!-- METHODS -->
+    <section class="view" id="methods">
+      <div class="hero"><div><div class="eyebrow">How to study</div><h1>Make it stick.</h1><p class="lead">Use retrieval and spaced revision instead of confusing familiarity with mastery.</p></div><span class="pill green">Evidence-informed</span></div>
+      <div class="grid">
+        <div class="stack">
+          <div class="card panel">
+            <div class="eyebrow">60-minute morning block</div><h2 style="margin-top:6px">The deep-work protocol</h2>
+            <div class="four" style="margin-top:14px">
+              <div class="stat"><strong>10m</strong><span>Recall</span></div><div class="stat"><strong>25m</strong><span>Learn</span></div><div class="stat"><strong>20m</strong><span>Apply</span></div><div class="stat"><strong>5m</strong><span>Record</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="taskList">
+              <div class="task"><b>Recall</b><span>Reproduce yesterday’s learning without notes.</span></div>
+              <div class="task"><b>Learn</b><span>Understand a small section using NCERT; use a lecture only where necessary.</span></div>
+              <div class="task"><b>Apply</b><span>Solve board-style questions independently.</span></div>
+              <div class="task"><b>Record</b><span>Write mistakes and pick tomorrow’s first question.</span></div>
+            </div>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Spaced repetition</div><h2 style="margin-top:6px">1–3–7–14 review ladder</h2>
+            <div class="taskList" style="margin-top:12px">
+              <div class="task"><b>Day 0 · Learn</b><span>Understand the topic and test yourself.</span></div>
+              <div class="task"><b>Day 1 · Recall</b><span>5–10 minutes without opening the book.</span></div>
+              <div class="task"><b>Day 3 · Test</b><span>Attempt questions from the topic.</span></div>
+              <div class="task"><b>Day 7 · Reinforce</b><span>Mixed question or explain it from memory.</span></div>
+              <div class="task"><b>Day 14 · Retest</b><span>Check whether you can still retrieve it.</span></div>
+            </div>
+            <p class="small" style="margin-top:10px">These are practical revision intervals, not a universal perfect formula. Shorten the gap when retrieval is weak.</p>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Procrastination plan</div><h2 style="margin-top:6px">WOOP + if–then plans</h2>
+            <div class="taskList" style="margin-top:12px">
+              <div class="task"><b>Wish</b><span>Complete the Accountancy numerical backlog.</span></div>
+              <div class="task"><b>Outcome</b><span>Enter pre-boards able to solve questions without copying solutions.</span></div>
+              <div class="task"><b>Obstacle</b><span>Work fatigue, sleepiness, phone and unclear starting point.</span></div>
+              <div class="task"><b>Plan</b><span>When I sit at my desk at 6:10 AM, I open the question I selected the previous night and work for five minutes.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card panel">
+            <div class="eyebrow">Bad-day fallback</div><h2 style="margin-top:6px">20-minute rescue session</h2>
+            <div class="three" style="margin-top:12px"><div class="stat"><strong>5m</strong><span>Start</span></div><div class="stat"><strong>10m</strong><span>Do one task</span></div><div class="stat"><strong>5m</strong><span>Consolidate</span></div></div>
+            <p class="small" style="margin-top:10px">This is not the normal target. It prevents one draining day from turning into a lost week.</p>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Per-subject output</div><h2 style="margin-top:6px">What counts as progress?</h2>
+            <div class="taskList" style="margin-top:12px">
+              <div class="task"><b>Accountancy</b><span>2–4 complete numerical solutions, depending on difficulty.</span></div>
+              <div class="task"><b>Business Studies</b><span>One NCERT section recalled + one application question.</span></div>
+              <div class="task"><b>Economics</b><span>One concept + numerical, diagram or written answer.</span></div>
+              <div class="task"><b>English</b><span>One extract or one structured answer.</span></div>
+              <div class="task"><b>PE</b><span>10–15 recall questions or one topic revised.</span></div>
+            </div>
+            <p class="small" style="margin-top:10px">Accuracy and independent work matter more than rushing to hit a number.</p>
+          </div>
+          <div class="card panel">
+            <div class="eyebrow">Energy protection</div><h2 style="margin-top:6px">Do not study against biology</h2>
+            <ul class="small" style="padding-left:18px;line-height:1.75">
+              <li>Protect 8–9 hours of sleep where needed.</li>
+              <li>Keep gym intensity manageable during heavy fatigue.</li>
+              <li>Use short breaks between longer work blocks.</li>
+              <li>Eat and hydrate properly.</li>
+              <li>If unusual sleepiness persists despite adequate sleep, consider a medical check rather than labelling it laziness.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="settings">
+      <div class="hero"><div><div class="eyebrow">Personal settings</div><h1>Your setup.</h1><p class="lead">Update the pre-board date when your school announces it, set your Accountancy option and back up your flashcards.</p></div></div>
+      <div class="two">
+        <div class="card panel">
+          <div class="eyebrow">Pre-boards</div><h2 style="margin-top:6px">Add exam start date</h2>
+          <label class="label" for="preboardInput" style="margin-top:14px">Pre-board start date</label><input class="field" id="preboardInput" type="date">
+          <p class="small" style="margin-top:8px">Leave blank while dates are not announced. The dashboard will show “Date not announced”.</p>
+          <button class="btn primary" id="savePreboard" style="margin-top:10px">Save date</button>
+        </div>
+        <div class="card panel">
+          <div class="eyebrow">Accountancy</div><h2 style="margin-top:6px">Part B option</h2>
+          <label class="label" for="partB2" style="margin-top:14px">Selected option</label><select class="field" id="partB2"><option value="AFS">Analysis of Financial Statements</option><option value="CA">Computerised Accounting</option><option value="unknown">Not confirmed yet</option></select>
+          <button class="btn primary" id="savePartB" style="margin-top:10px">Save option</button>
+        </div>
+        <div class="card panel">
+          <div class="eyebrow">Local data</div><h2 style="margin-top:6px">Flashcard backup</h2>
+          <p class="small">Planner progress and custom resources are saved in this browser. Flashcards use the old Recall database key so previously saved decks remain available on this same website and device.</p>
+          <div class="resourceActions" style="margin-top:13px"><button class="btn primary" id="backupBtn">Download flashcard backup</button><label class="btn" for="restoreFile">Restore backup</label><input id="restoreFile" type="file" accept="application/json" class="hidden"></div>
+        </div>
+        <div class="card panel">
+          <div class="eyebrow">Privacy and storage</div><h2 style="margin-top:6px">Saved on this device</h2>
+          <p class="small">The site does not send study progress to a server. Clearing browser/site data can remove local progress. Keep a backup of your flashcards and use the same device/browser to continue seamlessly.</p>
+          <div class="chipRow" style="margin-top:12px"><span class="chip">No account needed</span><span class="chip">Local storage</span><span class="chip">Mobile friendly</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobileNav" aria-label="Mobile navigation">
+  <button class="active" data-view="today"><i>⌂</i>Today</button>
+  <button data-view="plan"><i>▦</i>Plan</button>
+  <button data-view="resources"><i>⌘</i>Links</button>
+  <button data-view="flashcards"><i>▤</i>Recall</button>
+  <button data-view="exams"><i>◷</i>Exams</button>
+</nav>
+
+<div class="modalShade" id="modalShade" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="row"><h2 id="modalTitle">Notice</h2><button class="iconBtn" id="closeModal" aria-label="Close">×</button></div>
+    <div id="modalBody" class="small" style="margin-top:12px"></div>
+  </div>
+</div>
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const PLAN_KEY = 'recall-studyos-v1';
+const FLASH_KEY = 'recall-anki-v6'; // original Recall card storage key; preserves existing decks
+const DAY = 86400000;
+const subjects = {
+  Accounts:[
+    'Fundamentals of Partnership',
+    'Change in Profit Sharing Ratio',
+    'Admission of a Partner',
+    'Retirement and Death of a Partner',
+    'Dissolution of Partnership Firm',
+    'Accounting for Share Capital',
+    'Accounting for Debentures',
+    'Company Financial Statements',
+    'Accounting Ratios',
+    'Cash Flow Statement',
+    'Partnership + Company mixed numerical revision'
+  ],
+  'Business Studies':[
+    'Ch. 1 · Nature and Significance of Management',
+    'Ch. 2 · Principles of Management',
+    'Ch. 3 · Business Environment',
+    'Ch. 4 · Planning',
+    'Ch. 5 · Organising',
+    'Ch. 6 · Staffing',
+    'Ch. 7 · Directing',
+    'Ch. 8 · Controlling',
+    'Ch. 9 · Financial Management',
+    'Ch. 10 · Financial Markets',
+    'Ch. 11 · Marketing Management',
+    'Ch. 12 · Consumer Protection'
+  ],
+  Economics:[
+    'National Income · aggregates and methods',
+    'Income Determination · AD, AS and equilibrium',
+    'Money and Banking',
+    'Government Budget',
+    'Balance of Payments',
+    'Indian Economy on the Eve of Independence',
+    'Indian Economy 1950–1990',
+    'Economic Reforms',
+    'Human Capital Formation',
+    'Rural Development',
+    'Employment · Growth, Informalisation and Other Issues',
+    'Environment and Sustainable Development',
+    'Comparative Development Experiences of India and its Neighbours'
+  ],
+  English:[
+    'Flamingo prose · The Last Lesson, Lost Spring, Deep Water, The Rattrap, Indigo, Poets and Pancakes, The Interview, Going Places',
+    'Flamingo poetry · My Mother at Sixty-Six, Keeping Quiet, A Thing of Beauty, A Roadside Stand, Aunt Jennifer’s Tigers',
+    'Vistas · The Third Level, The Tiger King, Journey to the End of the Earth, The Enemy, On the Face of It, Memories of Childhood',
+    'Reading comprehension',
+    'Creative writing formats'
+  ],
+  'Physical Education':[
+    'Unit 1 · Management of Sporting Events',
+    'Unit 2 · Children and Women in Sports',
+    'Unit 3 · Yoga as Preventive Measure for Lifestyle Disease',
+    'Unit 4 · Physical Education and Sports for CWSN',
+    'Unit 5 · Sports and Nutrition',
+    'Unit 6 · Test and Measurement in Sports',
+    'Unit 7 · Physiology and Injuries in Sports',
+    'Unit 8 · Biomechanics and Sports',
+    'Unit 9 · Psychology and Sports',
+    'Unit 10 · Training in Sports'
+  ]
+};
+const weekly = {
+  1:{morning:'Accounts',evening:'English'},
+  2:{morning:'Business Studies',evening:'Physical Education'},
+  3:{morning:'Economics',evening:'English'},
+  4:{morning:'Accounts',evening:'Physical Education'},
+  5:{morning:'Business Studies',evening:'Accountancy mistakes'},
+  6:{morning:'Economics',evening:'English'},
+  0:{morning:'Physical Education',evening:'Weekly review'}
+};
+const morningByDate = [
+ ['2026-11-20','Business Studies','Ch. 1 · Nature and Significance of Management'],
+ ['2026-11-21','Economics','National Income · aggregates and methods'],
+ ['2026-11-22','Physical Education','Unit 1 · Management of Sporting Events'],
+ ['2026-11-23','Accounts','Fundamentals of Partnership · concepts and basic numerical questions'],
+ ['2026-11-24','Business Studies','Ch. 2 · Principles of Management'],
+ ['2026-11-25','Economics','Income Determination · AD, AS and equilibrium'],
+ ['2026-11-26','Accounts','Change in Profit Sharing Ratio · sacrifice/gain, goodwill and reserves'],
+ ['2026-11-27','Business Studies','Ch. 3 · Business Environment'],
+ ['2026-11-28','Economics','Money and Banking'],
+ ['2026-11-29','Physical Education','Unit 2 · Children and Women in Sports'],
+ ['2026-11-30','Accounts','Admission · goodwill, revaluation and capital adjustment'],
+ ['2026-12-01','Business Studies','Ch. 4 · Planning'],
+ ['2026-12-02','Economics','Government Budget'],
+ ['2026-12-03','Accounts','Retirement and Death · gaining ratio, executor account and instalments'],
+ ['2026-12-04','Business Studies','Ch. 5 · Organising'],
+ ['2026-12-05','Economics','Balance of Payments'],
+ ['2026-12-06','Physical Education','Unit 3 · Yoga'],
+ ['2026-12-07','Accounts','Dissolution · Realisation Account and journal entries'],
+ ['2026-12-08','Business Studies','Ch. 6 · Staffing'],
+ ['2026-12-09','Economics','Indian Economy on the Eve of Independence'],
+ ['2026-12-10','Accounts','Share Capital · issue of shares and journal entries'],
+ ['2026-12-11','Business Studies','Ch. 7 · Directing'],
+ ['2026-12-12','Economics','Indian Economy 1950–1990'],
+ ['2026-12-13','Physical Education','Unit 4 · Physical Education and Sports for CWSN'],
+ ['2026-12-14','Accounts','Debentures · issue, premium, collateral security and presentation'],
+ ['2026-12-15','Business Studies','Ch. 8 · Controlling'],
+ ['2026-12-16','Economics','Economic Reforms'],
+ ['2026-12-17','Accounts','Company Financial Statements and Tools of Analysis'],
+ ['2026-12-18','Business Studies','Ch. 9 · Financial Management'],
+ ['2026-12-19','Economics','Human Capital Formation'],
+ ['2026-12-20','Physical Education','Unit 5 · Sports and Nutrition'],
+ ['2026-12-21','Accounts','Accounting Ratios · formulas, calculations and interpretation'],
+ ['2026-12-22','Business Studies','Ch. 10 · Financial Markets'],
+ ['2026-12-23','Economics','Rural Development'],
+ ['2026-12-24','Accounts','Cash Flow Statement · classification and adjustments'],
+ ['2026-12-25','Business Studies','Ch. 11 · Marketing Management'],
+ ['2026-12-26','Economics','Employment · Growth, Informalisation and Other Issues'],
+ ['2026-12-27','Physical Education','Unit 6 · Test and Measurement in Sports'],
+ ['2026-12-28','Accounts','Mixed partnership + company accounts numerical test'],
+ ['2026-12-29','Business Studies','Ch. 12 · Consumer Protection'],
+ ['2026-12-30','Economics','Environment and Sustainable Development + Comparative Development'],
+ ['2026-12-31','Accounts','Mixed numerical test + mistake-bank repair']
+];
+const eveningTasks = [
+ ['2026-11-20','Accountancy mistakes','Set up your mistake bank; list gaps from partnership questions.'],
+ ['2026-11-21','English','The Last Lesson · context, plot and 1 written answer.'],
+ ['2026-11-22','Weekly review','Check this week’s work and select next week’s first task.'],
+ ['2026-11-23','English','Lost Spring · characters, themes and 1 answer.'],
+ ['2026-11-24','Physical Education','Unit 1 · key definitions and event-management sequence.'],
+ ['2026-11-25','English','Deep Water · context, theme and 1 answer.'],
+ ['2026-11-26','Physical Education','Unit 2 · classifications, facts and application.'],
+ ['2026-11-27','Accountancy mistakes','Correct errors from the week; redo one failed question.'],
+ ['2026-11-28','English','The Rattrap · plot, character and theme recall.'],
+ ['2026-11-29','Weekly review','Check completed sessions and revise the weakest point.'],
+ ['2026-11-30','English','Indigo · context, events and 1 board-style answer.'],
+ ['2026-12-01','Physical Education','Unit 3 · yoga definitions, benefits and procedures.'],
+ ['2026-12-02','English','Poets and Pancakes · chapter context and key details.'],
+ ['2026-12-03','Physical Education','Unit 4 · CWSN categories and inclusion strategies.'],
+ ['2026-12-04','Accountancy mistakes','Redo wrong Share Capital / Partnership working.'],
+ ['2026-12-05','English','The Interview · themes, viewpoints and extract.'],
+ ['2026-12-06','Weekly review','Weekly audit; update chapter status and mistake bank.'],
+ ['2026-12-07','English','Going Places · character motivations and themes.'],
+ ['2026-12-08','Physical Education','Unit 5 · nutrition, diet and key terms.'],
+ ['2026-12-09','English','My Mother at Sixty-Six · poetic devices and central idea.'],
+ ['2026-12-10','Physical Education','Unit 6 · tests, measurements and procedures.'],
+ ['2026-12-11','Accountancy mistakes','Redo two errors without looking at the solution.'],
+ ['2026-12-12','English','Keeping Quiet · theme, imagery and extract.'],
+ ['2026-12-13','Weekly review','Weekly audit and short recall of the last three topics.'],
+ ['2026-12-14','English','A Thing of Beauty · theme, imagery and poetic devices.'],
+ ['2026-12-15','Physical Education','Unit 7 · physiology concepts and sports injuries.'],
+ ['2026-12-16','English','A Roadside Stand · contrast, message and extract.'],
+ ['2026-12-17','Physical Education','Unit 8 · biomechanics, levers and movement.'],
+ ['2026-12-18','Accountancy mistakes','Check calculations, formats and working notes.'],
+ ['2026-12-19','English','Aunt Jennifer’s Tigers · symbols and interpretation.'],
+ ['2026-12-20','Weekly review','Review all December progress and weak chapters.'],
+ ['2026-12-21','English','The Third Level · plot, theme and extract practice.'],
+ ['2026-12-22','Physical Education','Unit 9 · sports psychology concepts.'],
+ ['2026-12-23','English','The Tiger King · satire, character and theme.'],
+ ['2026-12-24','Physical Education','Unit 10 · training methods and terminology.'],
+ ['2026-12-25','Accountancy mistakes','Review the week’s numerical mistake bank.'],
+ ['2026-12-26','English','Journey to the End of the Earth · context and message.'],
+ ['2026-12-27','Weekly review','Weekly audit + PE recall test.'],
+ ['2026-12-28','English','The Enemy · conflict, character and values.'],
+ ['2026-12-29','Physical Education','Units 1–5 · rapid recall and MCQs.'],
+ ['2026-12-30','English','On the Face of It + Memories of Childhood · themes and extracts.'],
+ ['2026-12-31','Physical Education','Units 6–10 · rapid recall and a full-syllabus check.']
+];
+const habits = ['Morning deep-study session completed','3 PM recall session completed','Evening session completed','Tomorrow’s exact task selected','Phone kept away during study'];
+const exams = [
+ ['Physical Education','2027-02-18'],
+ ['Accountancy','2027-02-23'],
+ ['English Core','2027-03-05'],
+ ['Economics','2027-03-16'],
+ ['Business Studies','2027-04-01']
+];
+const defaults = {
+  preboard:'',partB:'AFS',lectureProgress:30,resources:[],completedCalendar:{},completedChapters:{},daily:{},theme:'light'
+};
+let appState = loadAppState();
+function loadAppState(){
+  try{return {...defaults,...JSON.parse(localStorage.getItem(PLAN_KEY)||'{}')};}
+  catch(e){return {...defaults};}
+}
+function saveApp(){
+  try{localStorage.setItem(PLAN_KEY,JSON.stringify(appState));$('saveStatus').textContent='Saved just now';setTimeout(()=>$('saveStatus').textContent='Saved on this device',1200);}
+  catch(e){toast('Could not save. Browser storage may be full.');}
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function parseDate(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12);}
+function prettyDate(s,opts={weekday:'short',day:'numeric',month:'short'}){return parseDate(s).toLocaleDateString('en-IN',opts);}
+function dayIndex(s){return parseDate(s).getDay();}
+function todayKey(){return dateKey(new Date());}
+function nav(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===view));
+  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+  $('crumb').textContent=({today:'Today',plan:'Study plan',resources:'Resource library',flashcards:'Flashcards',exams:'Exam roadmap',methods:'Study system',settings:'Settings'})[view]||'Recall';
+  window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  if(view==='flashcards')renderFlash();
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.view)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.goto)));
+$('themeBtn').addEventListener('click',()=>{
+  appState.theme=appState.theme==='dark'?'light':'dark';applyTheme();saveApp();
+});
+function applyTheme(){
+  document.documentElement.classList.toggle('dark',appState.theme==='dark');
+  $('themeBtn').textContent=appState.theme==='dark'?'☀':'☾';
+  document.querySelector('meta[name="theme-color"]').content=appState.theme==='dark'?'#101012':'#f5f5f7';
+}
+function toast(msg){
+  const t=$('toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.add('hidden'),2400);
+}
+function renderToday(){
+  const now=new Date(),key=todayKey(),day=now.getDay(),rot=weekly[day];
+  $('dateLabel').textContent=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  const hour=now.getHours();
+  $('greeting').textContent=hour<12?'Start steady. Stay consistent.':hour<17?'Keep the plan moving.':'Close the day well.';
+  $('todaySubject').textContent=rot.morning==='Accounts'?'Accounts':rot.morning==='Business Studies'?'BST':rot.morning==='Physical Education'?'PE':'Economics';
+  $('todayTitle').textContent=rot.morning+' · '+(rot.morning==='Physical Education'?'Morning session':'Deep study');
+  $('todaySub').textContent=`Evening: ${rot.evening}. The 3 PM recall session stays fixed.`;
+  const row=morningByDate.find(r=>r[0]===key);
+  const next=morningByDate.find(r=>r[0]>=key);
+  const use=row||next;
+  if(use){
+    $('todayTaskDay').textContent=row?'Today':'Next scheduled plan';
+    $('todayTask').textContent=use[2];
+    const done=!!appState.completedCalendar[use[0]];
+    $('todayDone').textContent=done?'Completed ✓':'Mark complete';
+    $('todayTaskProgress').textContent=done?'This session is marked complete.':'Mark it complete after independent practice.';
+    $('todayDone').disabled=done;
+    $('todayDone').onclick=()=>{appState.completedCalendar[use[0]]=true;saveApp();renderAll();};
+  }else{
+    $('todayTaskDay').textContent='Plan window complete';
+    $('todayTask').textContent='Use the next session for exam-style revision and weak areas.';
+    $('todayDone').disabled=true;
+  }
+  const daily=appState.daily[key]||[];
+  $('habitList').innerHTML='';
+  habits.forEach((h,i)=>{
+    const checked=daily.includes(i);
+    const label=document.createElement('label');label.className='task'+(checked?' done':'');
+    const input=document.createElement('input');input.type='checkbox';input.checked=checked;
+    const span=document.createElement('span');span.textContent=h;
+    input.addEventListener('change',()=>{
+      const arr=new Set(appState.daily[key]||[]);
+      input.checked?arr.add(i):arr.delete(i);
+      appState.daily[key]=[...arr];saveApp();renderToday();
+    });
+    label.append(input,span);$('habitList').append(label);
+  });
+  $('habitCount').textContent=`${daily.length} / 5`;
+  $('habitBar').style.width=`${daily.length/5*100}%`;
+  renderPreboard();
+}
+function renderCalendar(){
+  const host=$('calendarList');host.innerHTML='';
+  let count=0;
+  morningByDate.forEach(([date,subject,topic])=>{
+    const done=!!appState.completedCalendar[date];if(done)count++;
+    const node=document.createElement('div');node.className='calendarDay'+(date===todayKey()?' today':'');
+    const dateEl=document.createElement('div');dateEl.className='dateTag';dateEl.innerHTML=`${prettyDate(date)}<small>${prettyDate(date,{year:'numeric'})}</small>`;
+    const details=document.createElement('div');
+    const sub=document.createElement('div');sub.className='calendarSubject';sub.textContent=subject;
+    const top=document.createElement('div');top.className='calendarTopic';top.textContent=topic;
+    details.append(sub,top);
+    const check=document.createElement('label');check.className='calendarDone';
+    const input=document.createElement('input');input.type='checkbox';input.checked=done;
+    const text=document.createElement('span');text.textContent=done?'Done':'Complete';
+    input.addEventListener('change',()=>{appState.completedCalendar[date]=input.checked;saveApp();renderCalendar();renderToday();});
+    check.append(input,text);node.append(dateEl,details,check);host.append(node);
+  });
+  $('calendarCount').textContent=`${count} / ${morningByDate.length}`;
+  $('calendarBar').style.width=`${count/morningByDate.length*100}%`;
+  const eve=$('eveningList');eve.innerHTML='';
+  eveningTasks.forEach(([date,sub,task])=>{
+    if(date>todayKey())return;
+    if(date<todayKey() && (parseDate(todayKey())-parseDate(date))/DAY>7)return;
+    const done=!!appState.completedCalendar['eve-'+date];
+    const item=document.createElement('label');item.className='task'+(done?' done':'');
+    const input=document.createElement('input');input.type='checkbox';input.checked=done;
+    const span=document.createElement('span');span.innerHTML=`<b>${prettyDate(date)} · ${esc(sub)}</b><br>${esc(task)}`;
+    input.addEventListener('change',()=>{appState.completedCalendar['eve-'+date]=input.checked;saveApp();renderCalendar();});
+    item.append(input,span);eve.append(item);
+  });
+  if(!eve.children.length)eve.innerHTML='<div class="empty">Evening tasks will appear here as the plan begins.</div>';
+}
+function renderSyllabus(){
+  const host=$('syllabusGroups');host.innerHTML='';
+  let total=0,done=0;
+  Object.entries(subjects).forEach(([name,items])=>{
+    const box=document.createElement('div');box.className='subjectGroup';
+    const head=document.createElement('div');head.className='subjectHead';
+    const title=document.createElement('strong');title.textContent=name;
+    const num=items.filter((_,i)=>appState.completedChapters[name+'-'+i]).length;
+    total+=items.length;done+=num;
+    const badge=document.createElement('span');badge.className='pill';badge.textContent=`${num} / ${items.length}`;
+    head.append(title,badge);
+    const list=document.createElement('div');list.className='subjectItems';
+    items.forEach((topic,i)=>{
+      const label=document.createElement('label');label.className='chapterCheck'+(appState.completedChapters[name+'-'+i]?' done':'');
+      const input=document.createElement('input');input.type='checkbox';input.checked=!!appState.completedChapters[name+'-'+i];
+      const span=document.createElement('span');span.textContent=topic;
+      input.addEventListener('change',()=>{appState.completedChapters[name+'-'+i]=input.checked;saveApp();renderSyllabus();});
+      label.append(input,span);list.append(label);
+    });
+    box.append(head,list);host.append(box);
+  });
+  $('syllabusTotal').textContent=`${done} / ${total} complete`;
+  $('syllabusBar').style.width=`${done/total*100}%`;
+}
+function renderPreboard(){
+  if(!appState.preboard){$('preboardTitle').textContent='Date not announced';$('preboardText').textContent='Set the date when your school publishes the timetable.';return;}
+  const diff=Math.ceil((parseDate(appState.preboard)-new Date())/DAY);
+  $('preboardTitle').textContent=diff>0?`${diff} days to pre-boards`:diff===0?'Pre-boards start today':'Pre-board date passed';
+  $('preboardText').textContent=prettyDate(appState.preboard,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function renderExams(){
+  $('examRows').innerHTML='';
+  exams.forEach(([name,date])=>{
+    const diff=Math.ceil((parseDate(date)-new Date())/DAY);
+    const value=diff>0?`${diff} days`:diff===0?'Today':'Completed';
+    const tr=document.createElement('tr');
+    [name,prettyDate(date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}),'10:30 AM – 1:30 PM',value].forEach((val,i)=>{const td=document.createElement('td');td.textContent=val;if(i===0)td.style.fontWeight='780';tr.append(td);});
+    $('examRows').append(tr);
+  });
+}
+function renderResources(){
+  $('lectureRange').value=appState.lectureProgress;
+  $('lectureCount').textContent=`${appState.lectureProgress} of 49`;
+  $('lectureBar').style.width=`${appState.lectureProgress/49*100}%`;
+  $('customResources').innerHTML='';
+  (appState.resources||[]).forEach((r,i)=>{
+    const box=document.createElement('div');box.className='resource';
+    const row=document.createElement('div');row.className='row';
+    const left=document.createElement('div');
+    const title=document.createElement('strong');title.textContent=r.name;
+    const type=document.createElement('p');type.className='small';type.textContent=r.type+' · '+r.url;
+    left.append(title,type);
+    const actions=document.createElement('div');actions.className='resourceActions';
+    const a=document.createElement('a');a.className='btn';a.href=r.url;a.target='_blank';a.rel='noopener';a.textContent='Open ↗';
+    const del=document.createElement('button');del.className='btn danger';del.textContent='Remove';
+    del.addEventListener('click',()=>{appState.resources.splice(i,1);saveApp();renderResources();});
+    actions.append(a,del);row.append(left,actions);box.append(row);$('customResources').append(box);
+  });
+  if(!appState.resources?.length)$('customResources').innerHTML='<div class="empty">Your added links will appear here.</div>';
+}
+$('lectureRange').addEventListener('input',()=>{
+  appState.lectureProgress=Number($('lectureRange').value);
+  $('lectureCount').textContent=`${appState.lectureProgress} of 49`;
+  $('lectureBar').style.width=`${appState.lectureProgress/49*100}%`;
+  saveApp();
+});
+$('showPlaylist').addEventListener('click',()=>{
+  $('playlistPreview').classList.toggle('hidden');
+  $('showPlaylist').textContent=$('playlistPreview').classList.contains('hidden')?'Preview here':'Hide preview';
+});
+$('resourceForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=$('resourceName').value.trim(),raw=$('resourceUrl').value.trim(),type=$('resourceType').value;
+  try{
+    const url=new URL(raw);if(!['https:','http:'].includes(url.protocol))throw new Error();
+    appState.resources.push({name,url:url.href,type});saveApp();$('resourceName').value='';$('resourceUrl').value='';renderResources();toast('Resource added.');
+  }catch(err){toast('Enter a valid http or https link.');}
+});
+
+/* Persistent pre-board and Part B settings */
+$('preboardInput').value=appState.preboard||'';
+$('partB').value=appState.partB||'AFS';$('partB2').value=appState.partB||'AFS';
+function updatePartBNote(){
+  const value=$('partB').value;
+  $('partBNote').textContent=value==='AFS'?'AFS: Financial Statements, Ratios, Cash Flow and Tools of Analysis.':value==='CA'?'Computerised Accounting: Excel errors/references, formulas, Data Validation, Pivot Tables, vouchers and accounting software.':'Confirm the option with your school before scheduling Part B practice.';
+}
+$('partB').addEventListener('change',updatePartBNote);
+$('partB').addEventListener('change',()=>{$('partB2').value=$('partB').value;});
+$('partB2').addEventListener('change',()=>{$('partB').value=$('partB2').value;updatePartBNote();});
+$('savePartB').addEventListener('click',()=>{appState.partB=$('partB2').value;saveApp();updatePartBNote();toast('Accountancy option saved.');});
+$('savePreboard').addEventListener('click',()=>{
+  appState.preboard=$('preboardInput').value;saveApp();renderPreboard();toast('Pre-board date saved.');
+});
+
+/* 50-minute focus timer + 10-minute break */
+let timerSeconds=50*60,timerRunning=false,timerInterval=null,breakMode=false;
+function timerRender(){
+  $('timerDisplay').textContent=`${String(Math.floor(timerSeconds/60)).padStart(2,'0')}:${String(timerSeconds%60).padStart(2,'0')}`;
+  $('timerToggle').textContent=timerRunning?'Pause':'Start';
+  $('timerCaption').textContent=breakMode?'Take a proper 10-minute break. No endless scrolling.':'One uninterrupted study block. Start before motivation starts negotiating.';
+}
+function timerStart(){
+  if(timerRunning){timerRunning=false;clearInterval(timerInterval);timerRender();return;}
+  timerRunning=true;timerRender();
+  timerInterval=setInterval(()=>{
+    timerSeconds--;
+    if(timerSeconds<=0){
+      clearInterval(timerInterval);timerRunning=false;
+      if(!breakMode){breakMode=true;timerSeconds=10*60;$('timerCaption').textContent='Focus block complete. Take a 10-minute reset.';toast('Focus block complete. Take a break.');}
+      else{breakMode=false;timerSeconds=50*60;toast('Break over. Ready for another focus block.');}
+    }
+    timerRender();
+  },1000);
+}
+$('timerToggle').addEventListener('click',timerStart);
+$('timerReset').addEventListener('click',()=>{timerRunning=false;clearInterval(timerInterval);timerSeconds=breakMode?10*60:50*60;timerRender();});
+$('timerMode').addEventListener('click',()=>{breakMode=!breakMode;timerRunning=false;clearInterval(timerInterval);timerSeconds=breakMode?10*60:50*60;timerRender();});
+$('startFocus').addEventListener('click',()=>{nav('today');if(!timerRunning)timerStart();});
+timerRender();
+
+/* Flashcard engine. Original Recall database key is intentionally reused. */
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+function makeDeck(name){return {id:uid(),name,created:Date.now(),options:{newPerDay:20,reviewsPerDay:200},cards:[]};}
+function makeCard(front,back,tags=[]){return {id:uid(),type:'basic',front,back,tags,created:Date.now(),due:Date.now(),state:'new',interval:0,ease:2.5,reps:0,lapses:0,suspended:false,buriedUntil:0,flag:0};}
+function loadFlash(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(FLASH_KEY)||'null');
+    if(raw&&Array.isArray(raw.decks)){
+      raw.history=Array.isArray(raw.history)?raw.history:[];
+      raw.settings=Object.assign({newLimit:20,reviewLimit:200,dark:false},raw.settings||{});
+      raw.decks.forEach(d=>{d.cards=Array.isArray(d.cards)?d.cards:[];d.cards.forEach(c=>{if(!Array.isArray(c.tags))c.tags=[];if(!c.state)c.state='new';});});
+      return raw;
+    }
+  }catch(e){}
+  const db={version:6,decks:[makeDeck('Class 12 — Quick Deck')],history:[],settings:{newLimit:20,reviewLimit:200,dark:false}};
+  return db;
+}
+let flashDB=loadFlash(),flashSession=null;
+function saveFlash(){
+  try{localStorage.setItem(FLASH_KEY,JSON.stringify(flashDB));}catch(e){toast('Flashcard storage is full. Export a backup.');}
+}
+function getFlashDeck(){return flashDB.decks.find(d=>d.id===$('flashDeckSelect').value)||flashDB.decks[0];}
+function formatDue(c){
+  if(c.state==='new')return 'New';
+  const diff=(c.due||0)-Date.now();
+  if(diff<=0)return 'Due';
+  if(diff<3600000)return `Due in ${Math.ceil(diff/60000)}m`;
+  return `Due in ${Math.ceil(diff/3600000)}h`;
+}
+function renderFlash(){
+  const sel=$('flashDeckSelect'),old=sel.value;sel.innerHTML='';
+  flashDB.decks.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.name;sel.append(o);});
+  if(flashDB.decks.some(d=>d.id===old))sel.value=old;
+  const d=getFlashDeck();if(!d){$('flashCardList').innerHTML='<div class="empty">Create a deck to begin.</div>';return;}
+  const due=d.cards.filter(c=>!c.suspended&&(!c.buriedUntil||c.buriedUntil<=Date.now())&&(!c.due||c.due<=Date.now())).length;
+  $('flashDeckTitle').textContent=d.name;$('flashQueueText').textContent=`${due} due · ${d.cards.filter(c=>c.state==='new').length} new · ${d.cards.length} total`;
+  $('flashCounts').textContent=`${d.cards.length} cards`;$('deckCardCount').textContent=d.cards.length;
+  const list=$('flashCardList');list.innerHTML='';
+  d.cards.slice().reverse().slice(0,60).forEach(c=>{
+    const item=document.createElement('div');item.className='flashItem';
+    const left=document.createElement('span');left.textContent=c.front;
+    const right=document.createElement('span');right.className='muted';right.textContent=formatDue(c);
+    item.append(left,right);list.append(item);
+  });
+  if(!list.children.length)list.innerHTML='<div class="empty">No cards in this deck yet.</div>';
+  if(!flashSession){$('flashPosition').textContent='READY TO REVIEW';$('flashFront').textContent='Create a card or start reviewing.';$('flashBack').classList.add('hidden');$('flashRates').classList.add('hidden');$('flashReveal').classList.remove('hidden');}
+}
+$('flashDeckSelect').addEventListener('change',()=>{flashSession=null;renderFlash();});
+$('createDeck').addEventListener('click',()=>{
+  const name=$('newDeckName').value.trim();if(!name){toast('Enter a deck name.');return;}
+  flashDB.decks.push(makeDeck(name));$('newDeckName').value='';saveFlash();renderFlash();toast('Deck created.');
+});
+$('addFlashCard').addEventListener('click',()=>{
+  const front=$('cardFront').value.trim(),back=$('cardBack').value.trim();
+  if(!front){toast('Add a question first.');return;}
+  const d=getFlashDeck();d.cards.push(makeCard(front,back,$('cardTags').value.trim().split(/\s+/).filter(Boolean)));
+  $('cardFront').value='';$('cardBack').value='';$('cardTags').value='';saveFlash();renderFlash();toast('Flashcard added.');
+});
+$('importBulk').addEventListener('click',()=>{
+  const d=getFlashDeck(),lines=$('bulkCards').value.replace(/\r/g,'').split('\n').filter(x=>x.trim());let n=0;
+  lines.forEach(line=>{const p=line.split('\t');if(p.length>=2&&p[0].trim()){d.cards.push(makeCard(p[0].trim(),p[1].trim(),(p[2]||'').split(/\s+/).filter(Boolean)));n++;}});
+  if(!n){toast('Use Front[TAB]Back[TAB]tags.');return;}
+  $('bulkCards').value='';saveFlash();renderFlash();toast(`${n} cards imported.`);
+});
+function startFlashReview(){
+  const d=getFlashDeck();if(!d)return;
+  const due=d.cards.filter(c=>!c.suspended&&(!c.buriedUntil||c.buriedUntil<=Date.now())&&(!c.due||c.due<=Date.now())).sort((a,b)=>(a.state==='new'?0:1)-(b.state==='new'?0:1)||(a.due||0)-(b.due||0)).slice(0,200);
+  if(!due.length){toast('No cards due in this deck.');return;}
+  flashSession={deckId:d.id,queue:due,i:0,revealed:false};showFlashCard();
+}
+function showFlashCard(){
+  const c=flashSession?.queue[flashSession.i];if(!c)return;
+  flashSession.revealed=false;
+  $('flashPosition').textContent=`CARD ${flashSession.i+1} OF ${flashSession.queue.length}`;
+  $('flashFront').textContent=c.front;$('flashBack').textContent='';$('flashBack').classList.add('hidden');
+  $('flashReveal').classList.remove('hidden');$('flashRates').classList.add('hidden');
+}
+function revealFlashCard(){
+  const c=flashSession?.queue[flashSession.i];if(!c)return;
+  flashSession.revealed=true;$('flashBack').textContent=c.back||'No answer saved.';$('flashBack').classList.remove('hidden');
+  $('flashReveal').classList.add('hidden');$('flashRates').classList.remove('hidden');
+}
+function rateFlash(r){
+  if(!flashSession?.revealed)return;
+  const c=flashSession.queue[flashSession.i],d=flashDB.decks.find(x=>x.id===flashSession.deckId);
+  const now=Date.now();c.reps=(c.reps||0)+1;
+  if(r==='again'){c.lapses=(c.lapses||0)+1;c.state='learning';c.interval=0;c.due=now+10*60000;}
+  else{
+    let interval=c.interval||0;
+    if(c.state==='new'||c.state==='learning')interval=({hard:1,good:3,easy:7})[r];
+    else interval=Math.max(1,Math.round(interval*({hard:1.2,good:(c.ease||2.5),easy:(c.ease||2.5)+1})[r]));
+    c.state='review';c.interval=interval;c.due=now+interval*DAY;
+    if(r==='hard')c.ease=Math.max(1.3,(c.ease||2.5)-.15);
+    if(r==='easy')c.ease=(c.ease||2.5)+.15;
+  }
+  flashDB.history.push({id:uid(),cardId:c.id,deckId:d.id,rating:r,time:now,interval:c.interval});
+  flashSession.i++;
+  saveFlash();
+  if(flashSession.i>=flashSession.queue.length){flashSession=null;renderFlash();toast('Review session complete.');}
+  else{showFlashCard();renderFlashListOnly();}
+}
+function renderFlashListOnly(){
+  const d=getFlashDeck();if(!d)return;
+  $('flashCounts').textContent=`${d.cards.length} cards`;$('deckCardCount').textContent=d.cards.length;
+}
+$('startReview').addEventListener('click',startFlashReview);
+$('flashReveal').addEventListener('click',revealFlashCard);
+document.querySelectorAll('[data-rate]').forEach(b=>b.addEventListener('click',()=>rateFlash(b.dataset.rate)));
+$('exportFlash').addEventListener('click',()=>{
+  const d=getFlashDeck();const t=d.cards.map(c=>`${String(c.front).replace(/[\t\n]/g,' ')}\t${String(c.back).replace(/[\t\n]/g,' ')}\t${(c.tags||[]).join(' ')}`).join('\n');
+  download(`${d.name.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}.tsv`,t,'text/tab-separated-values;charset=utf-8');
+});
+function download(name,text,type){
+  const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+$('backupBtn').addEventListener('click',()=>{
+  download('recall-flashcards-backup.json',JSON.stringify(flashDB,null,2),'application/json');
+});
+$('restoreFile').addEventListener('change',()=>{
+  const file=$('restoreFile').files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=()=>{
+    try{const raw=JSON.parse(reader.result);if(!raw||!Array.isArray(raw.decks))throw new Error();flashDB=raw;saveFlash();renderFlash();toast('Flashcard backup restored.');}
+    catch(e){toast('That backup file is not valid.');}
+    $('restoreFile').value='';
+  };reader.readAsText(file);
+});
+function renderAll(){applyTheme();renderToday();renderCalendar();renderSyllabus();renderExams();renderResources();$('preboardInput').value=appState.preboard||'';$('partB').value=appState.partB||'AFS';$('partB2').value=appState.partB||'AFS';updatePartBNote();renderFlash();}
+function downloadJSON(){download('recall-studyos-backup.json',JSON.stringify(appState,null,2),'application/json');}
+$('closeModal').addEventListener('click',()=>$('modalShade').classList.remove('open'));
+$('modalShade').addEventListener('click',e=>{if(e.target===$('modalShade'))$('modalShade').classList.remove('open');});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')$('modalShade').classList.remove('open');
+  if(navViewIsFlash() && e.code==='Space' && flashSession){e.preventDefault();flashSession.revealed?null:revealFlashCard();}
+});
+function navViewIsFlash(){return $('flashcards').classList.contains('on');}
+renderAll();
+})();
+</script>
+</body>
+</html>
