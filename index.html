@@ -491,6 +491,32 @@ body.noteWritingLocked .mobileNav{visibility:hidden}
 .planGrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:13px;margin-top:15px}
 @media(max-width:760px){.planSlots{grid-template-columns:1fr}.planSlot+.planSlot{border-left:0;border-top:1px solid var(--line)}.planGrid{grid-template-columns:1fr}.phasePart summary{grid-template-columns:112px minmax(0,1fr) 14px}.phasePart summary strong{font-size:11px}.topicListPlan{grid-template-columns:1fr}.cycleRow{grid-template-columns:72px minmax(0,1fr);gap:7px}.cycleHead{display:none}.cycleRow span:last-child{grid-column:2}.phaseTwoFocus{grid-template-columns:1fr}}
 
+
+/* Two-slot daily plan: Accountancy AM + rotating subject PM */
+.dailyCalendarHead{display:grid;grid-template-columns:78px minmax(0,1fr) minmax(0,1fr);gap:8px;padding:0 9px 5px;color:var(--muted);font-size:8px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.dailyCalendarRow{display:grid;grid-template-columns:78px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:stretch;padding:8px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.dailyCalendarRow.current{border-color:rgba(8,124,240,.52);box-shadow:0 0 0 3px rgba(8,124,240,.07)}
+.dailyCalendarDate{padding:7px 2px;font-size:10px;font-weight:820;line-height:1.35}
+.dailyCalendarDate small{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:560}
+.dailyCalendarSlot{min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:var(--solid)}
+.dailyCalendarSlot.am{background:rgba(201,243,109,.075)}
+.dailyCalendarSlot.pm{background:rgba(143,215,232,.075)}
+.dailyCalendarSlotTop{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.dailyCalendarSubject{font-size:9px;font-weight:850;letter-spacing:.035em}
+.dailyCalendarTime{font-size:8px;color:var(--muted);font-weight:700}
+.dailyCalendarTask{font-size:10px;line-height:1.45;overflow-wrap:anywhere}
+.dailyCalendarCheck{display:inline-flex;align-items:center;gap:4px;font-size:8px;color:var(--muted);white-space:nowrap;font-weight:750}
+.dailyCalendarCheck input{width:14px;height:14px;margin:0;accent-color:#83bd32}
+.dailyCalendarRest{font-size:9px;color:var(--amber);font-weight:760}
+@media(max-width:620px){
+ .dailyCalendarHead{display:none}
+ .dailyCalendarRow{grid-template-columns:1fr 1fr;gap:6px;padding:7px}
+ .dailyCalendarDate{grid-column:1/-1;padding:2px 3px 5px;border-bottom:1px solid var(--line)}
+ .dailyCalendarSlot{padding:8px}
+ .dailyCalendarSubject{font-size:8px}
+ .dailyCalendarTask{font-size:9px}
+}
+
 </style>
 </head>
 <body>
@@ -697,15 +723,17 @@ body.noteWritingLocked .mobileNav{visibility:hidden}
 
 <div class="planGrid">
   <div class="card panel">
-    <div class="cardHead"><div><div class="eyebrow">Date-wise schedule · 8–9 PM</div><h2>Main subject calendar</h2><p class="small">The next unfinished evening session drives the Today card automatically.</p></div><span class="pill" id="calendarCount">0 / 93</span></div>
+    <div class="cardHead"><div><div class="eyebrow">Date-wise schedule · both fixed slots</div><h2>Every study day</h2><p class="small">The morning Accountancy task and evening subject are scheduled separately for every date. Tick each block independently.</p></div><span class="pill" id="calendarCount">0 / 185 blocks</span></div>
     <div class="progress"><div id="calendarBar"></div></div>
-    <div class="calendar" id="calendarList" style="margin-top:12px"></div>
+    <div class="dailyCalendarHead"><span>Date</span><span>6–7 AM · Accountancy</span><span>8–9 PM · Main subject</span></div>
+    <div class="calendar" id="calendarList" style="margin-top:8px"></div>
   </div>
   <div class="stack">
     <div class="card panel">
-      <div class="eyebrow">Daily · 6–7 AM</div><h2 style="margin-top:6px">Accountancy practice</h2>
+      <div class="eyebrow">Every date · 6–7 AM</div><h2 style="margin-top:6px">Accountancy is scheduled daily</h2>
       <p class="small" id="eveningToday">Today's Accountancy practice target will appear here.</p>
-      <details style="margin-top:12px"><summary class="small" style="font-weight:750">View daily Accountancy calendar</summary><div class="stack" id="eveningSchedule" style="margin-top:10px"></div></details>
+      <p class="small" style="margin-top:9px">The morning block is shown alongside the 8–9 PM subject on every date in the calendar. Tick the two blocks separately; completing an evening chapter never cancels Accountancy practice.</p>
+      <details style="margin-top:12px"><summary class="small" style="font-weight:750">View next 14 Accountancy tasks</summary><div class="stack" id="eveningSchedule" style="margin-top:10px"></div></details>
     </div>
     <div class="card panel">
       <div class="eyebrow">Accountancy Part B</div><h2 style="margin-top:6px">Choose your option</h2>
@@ -2104,35 +2132,130 @@ function renderPreboard(){
   const diff=diffDays(state.preboard,todayKey());$('preboardTitle').textContent=diff>0?`${diff} days to pre-boards`:diff===0?'Pre-boards start today':'Pre-board date passed';$('preboardText').textContent=dateLabel(state.preboard,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
 function renderCalendar(){
-  const host=$('calendarList');host.innerHTML='';let done=0;
+  const host=$('calendarList');
+  host.innerHTML='';
+  let accountDone=0,accountRequired=0,eveningDone=0;
+  const morningByDate=new Map(morning.map(row=>[row[0],row]));
   evenings.forEach(rowData=>{
     const [date,subject,topic]=rowData;
+    const morningRow=morningByDate.get(date);
+    const accountTask=morningRow?morningRow[2]:'Accountancy · mixed numerical practice and mistake-bank correction';
+    const isRestDay=/no compulsory Accounts drill/i.test(accountTask);
+    const accountChecked=!!state.accountDrillDone[date];
     const manual=!!state.completedCalendar[date];
     const chapterDone=!manual&&isPlanDone(rowData);
-    const isDone=manual||chapterDone;
-    if(isDone)done++;
+    const eveningChecked=manual||chapterDone;
+    if(!isRestDay){accountRequired++;if(accountChecked)accountDone++;}
+    if(eveningChecked)eveningDone++;
+
     const row=document.createElement('div');
-    row.className='calendarRow'+(date===todayKey()?' current':'')+(isDone?' completed':'')+(chapterDone?' skipped':'');
-    const dt=document.createElement('div');dt.className='calDate';dt.innerHTML=`${dateLabel(date)}<small>${dateLabel(date,{year:'numeric'})}</small>`;
-    const info=document.createElement('div');
-    const sub=document.createElement('div');sub.className='calSub';sub.textContent=subject;
-    const top=document.createElement('div');top.className='calTopic';top.textContent=topic;
-    if(chapterDone){const skip=document.createElement('div');skip.className='small';skip.textContent='✓ Skipped · chapter already mastered';info.append(sub,top,skip);}
-    else info.append(sub,top);
-    const label=document.createElement('label');label.className='calCheck';
-    const input=document.createElement('input');input.type='checkbox';input.checked=isDone;input.disabled=chapterDone;
-    const txt=document.createElement('span');txt.textContent=chapterDone?'Chapter done':manual?'Done':'Complete';
-    input.addEventListener('change',()=>{state.completedCalendar[date]=input.checked;saveState();renderAll();});
-    label.append(input,txt);row.append(dt,info,label);host.append(row);
+    row.className='dailyCalendarRow'+(date===todayKey()?' current':'');
+    const dt=document.createElement('div');
+    dt.className='dailyCalendarDate';
+    dt.textContent=dateLabel(date);
+    const year=document.createElement('small');
+    year.textContent=dateLabel(date,{year:'numeric'});
+    dt.append(year);
+
+    const am=document.createElement('div');
+    am.className='dailyCalendarSlot am';
+    const amTop=document.createElement('div');
+    amTop.className='dailyCalendarSlotTop';
+    const amSubject=document.createElement('span');
+    amSubject.className='dailyCalendarSubject';
+    amSubject.textContent='ACCOUNTANCY';
+    const amTime=document.createElement('span');
+    amTime.className='dailyCalendarTime';
+    amTime.textContent='6:00–7:00 AM';
+    amTop.append(amSubject,amTime);
+    const amTask=document.createElement('div');
+    amTask.className='dailyCalendarTask';
+    amTask.textContent=accountTask;
+    am.append(amTop,amTask);
+
+    if(isRestDay){
+      const rest=document.createElement('div');
+      rest.className='dailyCalendarRest';
+      rest.textContent='PE board exam day · no compulsory Accounts drill';
+      rest.style.marginTop='7px';
+      am.append(rest);
+    }else{
+      const amLabel=document.createElement('label');
+      amLabel.className='dailyCalendarCheck';
+      amLabel.style.marginTop='8px';
+      const amInput=document.createElement('input');
+      amInput.type='checkbox';
+      amInput.checked=accountChecked;
+      amInput.addEventListener('change',()=>{
+        state.accountDrillDone[date]=amInput.checked;
+        saveState();
+        renderCalendar();
+        if(date===todayKey())renderToday();
+      });
+      const amText=document.createElement('span');
+      amText.textContent=accountChecked?'Practice done':'Mark AM practice done';
+      amLabel.append(amInput,amText);
+      am.append(amLabel);
+    }
+
+    const pm=document.createElement('div');
+    pm.className='dailyCalendarSlot pm';
+    const pmTop=document.createElement('div');
+    pmTop.className='dailyCalendarSlotTop';
+    const pmSubject=document.createElement('span');
+    pmSubject.className='dailyCalendarSubject';
+    pmSubject.textContent=subject;
+    const pmTime=document.createElement('span');
+    pmTime.className='dailyCalendarTime';
+    pmTime.textContent='8:00–9:00 PM';
+    pmTop.append(pmSubject,pmTime);
+    const pmTask=document.createElement('div');
+    pmTask.className='dailyCalendarTask';
+    pmTask.textContent=topic;
+    pm.append(pmTop,pmTask);
+    const pmLabel=document.createElement('label');
+    pmLabel.className='dailyCalendarCheck';
+    pmLabel.style.marginTop='8px';
+    const pmInput=document.createElement('input');
+    pmInput.type='checkbox';
+    pmInput.checked=eveningChecked;
+    pmInput.disabled=chapterDone;
+    pmInput.addEventListener('change',()=>{
+      state.completedCalendar[date]=pmInput.checked;
+      saveState();
+      renderAll();
+    });
+    const pmText=document.createElement('span');
+    pmText.textContent=chapterDone?'Chapter mastered':eveningChecked?'Evening done':'Mark PM session done';
+    pmLabel.append(pmInput,pmText);
+    pm.append(pmLabel);
+
+    row.append(dt,am,pm);
+    host.append(row);
   });
-  $('calendarCount').textContent=`${done}/${evenings.length}`;
-  $('calendarBar').style.width=`${done/evenings.length*100}%`;
-  const todayAccount=morning.find(x=>x[0]===todayKey())||morning.find(x=>x[0]>=todayKey());
-  $('eveningToday').textContent=todayAccount?`${todayAccount[1]} · ${todayAccount[2]}`:'Accountancy daily practice calendar complete.';
-  const eveHost=$('eveningSchedule');eveHost.innerHTML='';
-  morning.filter(x=>x[0]>=todayKey()).slice(0,14).forEach(([date,subject,topic])=>{
-    const item=document.createElement('div');item.className='task';
-    item.innerHTML=`<span><b>${dateLabel(date)} · ${esc(subject)}</b><br><span class="small">${esc(topic)}</span></span>`;
+
+  const totalBlocks=accountRequired+evenings.length;
+  const completedBlocks=accountDone+eveningDone;
+  $('calendarCount').textContent=completedBlocks+'/'+totalBlocks+' blocks';
+  $('calendarBar').style.width=(totalBlocks?completedBlocks/totalBlocks*100:0)+'%';
+
+  const todayAccount=morningByDate.get(todayKey())||morning.find(x=>x[0]>=todayKey());
+  $('eveningToday').textContent=todayAccount
+    ?'6–7 AM · Accountancy · '+todayAccount[2]
+    :'The scheduled Accountancy practice calendar is complete.';
+  const eveHost=$('eveningSchedule');
+  eveHost.innerHTML='';
+  morning.filter(x=>x[0]>=todayKey()).slice(0,14).forEach(([date,subject,task])=>{
+    const item=document.createElement('div');
+    item.className='task';
+    const content=document.createElement('span');
+    const title=document.createElement('b');
+    title.textContent=dateLabel(date)+' · '+subject+' · 6–7 AM';
+    const detail=document.createElement('span');
+    detail.className='small';
+    detail.textContent=task;
+    content.append(title,document.createElement('br'),detail);
+    item.append(content);
     eveHost.append(item);
   });
 }
